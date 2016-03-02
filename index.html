@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="foundationDemoApp" id="top">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Angular directives for Foundation 6</title>
+  <meta name="description" content="AngularJS (Angular) native
+  directives for Foundation. Small footprint (5kB gzipped!),
+  no 3rd party JS dependencies (jQuery, Foundation JS) required!
+  Widgets: Accordion, Alert, Buttons, Dropdown Toggle, Modal, Pagination, Tabs, ">
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/fastclick/0.6.7/fastclick.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+  <script src="mm-foundation-tpls-0.9.0.js"></script>
+  <script src="assets/plunker.js"></script>
+  <script src="assets/app.js"></script>
+
+  <script>
+    if(location.hostname === 'localhost'){
+      document.write('<script src="http://'
+        + 'localhost:35729/livereload.js"></'
+        + 'script>')
+    }
+  </script>
+
+  <link href="https://cdn.rawgit.com/zurb/foundation-sites/develop/dist/foundation.min.css" rel="stylesheet"/>
+  <!-- <link href="//cdnjs.cloudflare.com/ajax/libs/foundation/6.2.0/css/foundation.min.css" rel="stylesheet"/> -->
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/rainbow.css"/>
+  <link rel="stylesheet" href="assets/demo.css"/>
+  <link rel="author" href="https://github.com/pineconellc/angular-foundation/graphs/contributors">
+</head>
+<body class="ng-cloak" ng-controller="MainCtrl">
+<!-- <div class="fixed">
+  <top-bar scrolltop="false">
+    <ul class="title-area">
+      <li class="name">
+        <h1><a href="#">Angular Foundation</a></h1>
+      </li>
+      <li toggle-top-bar class="menu-icon"><a href="#">Menu</a></li>
+    </ul>
+
+    <top-bar-section>
+      <ul class="right">
+        <li><a href="#getting_started">Getting started</a></li>
+        <li has-dropdown>
+          <a href="#">Directives</a>
+          <ul id="directives-list" top-bar-dropdown>
+            <li><a href="#accordion">Accordion</a></li><li><a href="#alert">Alert</a></li><li><a href="#buttons">Buttons</a></li><li><a href="#dropdownToggle">Dropdown Toggle</a></li><li><a href="#modal">Modal</a></li><li><a href="#pagination">Pagination</a></li><li><a href="#tabs">Tabs</a></li>
+          </ul>
+        </li>
+        <li><a href="#animations">Animations</a></li>
+      </ul>
+    </top-bar-section>
+  </topbar>
+</div> -->
+<div class="header-placeholder"></div>
+<div role="main">
+  <header class="bs-header text-center" id="overview">
+    <figure>
+      <img src="assets/logo.png" class="logo" />
+    </figure>
+    <div class="container">
+      <div class="row">
+        <div class="columns large-12 medium-11 small-11 small-centered">
+
+          <h1>Angular Foundation 6</h1>
+          <h3>With love, from <a href="http://github.com/pineconellc/">Pinecone</a></h3>
+          <hr>
+          <p>
+          <a class="button radius large" href="https://github.com/pineconellc/angular-foundation/tree/gh-pages"><i class="fa fa-download"></i> Download v0.9.0</a>
+            <a class="button radius large" href="https://github.com/pineconellc/angular-foundation"><i class="fa fa-github"></i> Contribute</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="container">
+    <div class="row">
+      <div class="columns border large-12 medium-11 small-11 small-centered">
+        <section id="getting_started">
+          <div class="page-header">
+            <h1>Getting started</h1>
+          </div>
+          <h3>Dependencies</h3>
+          <p>
+            This repository contains a set of <strong>native AngularJS directives</strong> based on
+            Foundation's markup and CSS. As a result no dependency on
+            jQuery or Foundation's
+            JavaScript is required. The <strong>only required dependencies</strong> are:
+          </p>
+          <ul>
+            <li><strong>AngularJS</strong> 1.5 (tested with <!-- 1.5.0 and --> 1.5.0)</li>
+            <li><strong>Foundation 6 CSS</strong> (tested with version 6.2.0).</li>
+          </ul>
+          <h3>Downloading</h3>
+          <p>
+            Build files for all directives are distributed in several flavours: minified for production usage, un-minified
+            for development, with or without templates. All the options are described and can be
+            <a href="https://github.com/pineconellc/angular-foundation/tree/gh-pages">downloaded from here</a>.
+          </p>
+          <h3>Installation</h3>
+          <p>As soon as you've got all the files downloaded and included in your page you just need to declare
+             a dependency on the <code>mm.foundation</code> <a href="http://docs.angularjs.org/guide/module">module</a>:<br>
+             <pre><code>angular.module('myModule', ['mm.foundation']);</code></pre>
+          </p>
+          <p>You can fork one of the plunkers from this page to see a working example of what is described here.</p>
+        </section>
+        
+          <section class="demo" id="accordion">
+            <div class="page-header">
+              <h1>Accordion<small>
+                (<a target="_blank" href="https://github.com/pineconellc/angular-foundation/tree/master/src/accordion">mm.foundation.accordion</a>)
+              </small></h1>
+            </div>
+            <div class="row">
+              <div class="columns medium-6 show-grid">
+                <div ng-controller="AccordionDemoCtrl">
+  <label class="checkbox">
+    <input type="checkbox" ng-model="oneAtATime">
+    Open only one at a time
+  </label>
+
+  <accordion close-others="oneAtATime">
+    <accordion-group heading="Static Header, initially expanded" is-open="true">
+      This content is straight in the template.
+    </accordion-group>
+    <accordion-group heading="{{group.title}}" ng-repeat="group in groups">
+      {{group.content}}
+    </accordion-group>
+    <accordion-group heading="Dynamic Body Content">
+      <p>The body of the accordion group grows to fit the contents</p>
+        <button class="button small" ng-click="addItem()">Add Item</button>
+        <div ng-repeat="item in items">{{item}}</div>
+    </accordion-group>
+    <accordion-group is-open="isopen">
+        <accordion-heading>
+            I can have markup, too!
+        </accordion-heading>
+        This is just some content to illustrate fancy headings.
+    </accordion-group>
+  </accordion>
+</div>
+
+              </div>
+              <div class="columns medium-6">
+                <p>The <strong>accordion directive</strong> builds on top of the collapse directive to provide a list of items, with collapsible bodies that are collapsed or expanded by clicking on the item's header.</p>
+
+<p>We can control whether expanding an item will cause the other items to close, using the <code>close-others</code> attribute on accordion.</p>
+
+<p>The body of each accordion group is transcluded in to the body of the collapsible element.</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row code">
+              <div class="columns medium-12" ng-controller="PlunkerCtrl">
+                <div class="right">
+                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'accordion')"><i class="fa fa-edit"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                  <tab heading="Markup">
+                    <div plunker-content="markup">
+                      <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;AccordionDemoCtrl&quot;&gt;
+  &lt;label class=&quot;checkbox&quot;&gt;
+    &lt;input type=&quot;checkbox&quot; ng-model=&quot;oneAtATime&quot;&gt;
+    Open only one at a time
+  &lt;/label&gt;
+
+  &lt;accordion close-others=&quot;oneAtATime&quot;&gt;
+    &lt;accordion-group heading=&quot;Static Header, initially expanded&quot; is-open=&quot;true&quot;&gt;
+      This content is straight in the template.
+    &lt;/accordion-group&gt;
+    &lt;accordion-group heading=&quot;{{group.title}}&quot; ng-repeat=&quot;group in groups&quot;&gt;
+      {{group.content}}
+    &lt;/accordion-group&gt;
+    &lt;accordion-group heading=&quot;Dynamic Body Content&quot;&gt;
+      &lt;p&gt;The body of the accordion group grows to fit the contents&lt;/p&gt;
+        &lt;button class=&quot;button small&quot; ng-click=&quot;addItem()&quot;&gt;Add Item&lt;/button&gt;
+        &lt;div ng-repeat=&quot;item in items&quot;&gt;{{item}}&lt;/div&gt;
+    &lt;/accordion-group&gt;
+    &lt;accordion-group is-open=&quot;isopen&quot;&gt;
+        &lt;accordion-heading&gt;
+            I can have markup, too!
+        &lt;/accordion-heading&gt;
+        This is just some content to illustrate fancy headings.
+    &lt;/accordion-group&gt;
+  &lt;/accordion&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+                  </tab>
+                  <tab heading="JavaScript">
+                    <div plunker-content="javascript">
+                      <pre ng-non-bindable><code data-language="javascript">angular.module(&#39;foundationDemoApp&#39;).controller(&#39;AccordionDemoCtrl&#39;, function($scope) {
+  $scope.oneAtATime = true;
+
+  $scope.groups = [
+    {
+      title: &quot;Dynamic Group Header - 1&quot;,
+      content: &quot;Dynamic Group Body - 1&quot;
+    },
+    {
+      title: &quot;Dynamic Group Header - 2&quot;,
+      content: &quot;Dynamic Group Body - 2&quot;
+    }
+  ];
+
+  $scope.items = [&#39;Item 1&#39;, &#39;Item 2&#39;, &#39;Item 3&#39;];
+
+  $scope.addItem = function() {
+    var newItemNo = $scope.items.length + 1;
+    $scope.items.push(&#39;Item &#39; + newItemNo);
+  };
+});
+</code></pre>
+                    </div>
+                  </tab>
+                </tabset>
+              </div>
+            </div>
+          </section>
+          <script>angular.module('foundationDemoApp').controller('AccordionDemoCtrl', function($scope) {
+  $scope.oneAtATime = true;
+
+  $scope.groups = [
+    {
+      title: "Dynamic Group Header - 1",
+      content: "Dynamic Group Body - 1"
+    },
+    {
+      title: "Dynamic Group Header - 2",
+      content: "Dynamic Group Body - 2"
+    }
+  ];
+
+  $scope.items = ['Item 1', 'Item 2', 'Item 3'];
+
+  $scope.addItem = function() {
+    var newItemNo = $scope.items.length + 1;
+    $scope.items.push('Item ' + newItemNo);
+  };
+});
+</script>
+        
+          <section class="demo" id="alert">
+            <div class="page-header">
+              <h1>Alert<small>
+                (<a target="_blank" href="https://github.com/pineconellc/angular-foundation/tree/master/src/alert">mm.foundation.alert</a>)
+              </small></h1>
+            </div>
+            <div class="row">
+              <div class="columns medium-6 show-grid">
+                <div ng-controller="AlertDemoCtrl">
+  <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+  <button class='button' ng-click="addAlert()">Add Alert</button>
+</div>
+
+              </div>
+              <div class="columns medium-6">
+                <p>Alert is an AngularJS-version of Foundation's alert.</p>
+
+<p>This directive can be used to generate alerts from the dynamic model data (using the ng-repeat directive);</p>
+
+<p>The presence of the "close" attribute determines if a close button is displayed</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row code">
+              <div class="columns medium-12" ng-controller="PlunkerCtrl">
+                <div class="right">
+                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'alert')"><i class="fa fa-edit"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                  <tab heading="Markup">
+                    <div plunker-content="markup">
+                      <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;AlertDemoCtrl&quot;&gt;
+  &lt;alert ng-repeat=&quot;alert in alerts&quot; type=&quot;alert.type&quot; close=&quot;closeAlert($index)&quot;&gt;{{alert.msg}}&lt;/alert&gt;
+  &lt;button class=&#39;button&#39; ng-click=&quot;addAlert()&quot;&gt;Add Alert&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+                  </tab>
+                  <tab heading="JavaScript">
+                    <div plunker-content="javascript">
+                      <pre ng-non-bindable><code data-language="javascript">angular.module(&#39;foundationDemoApp&#39;).controller(&#39;AlertDemoCtrl&#39;, function($scope) {
+  $scope.alerts = [
+    { type: &#39;alert&#39;, msg: &#39;Oh snap! Change a few things up and try submitting again.&#39; },
+    { type: &#39;success round&#39;, msg: &#39;Well done! You successfully read this important alert message.&#39; }
+  ];
+
+  $scope.addAlert = function() {
+    $scope.alerts.push({type: &#39;alert&#39;, msg: &quot;Another alert!&quot;});
+  };
+
+  $scope.closeAlert = function(index) {
+    $scope.alerts.splice(index, 1);
+  };
+
+});
+</code></pre>
+                    </div>
+                  </tab>
+                </tabset>
+              </div>
+            </div>
+          </section>
+          <script>angular.module('foundationDemoApp').controller('AlertDemoCtrl', function($scope) {
+  $scope.alerts = [
+    { type: 'alert', msg: 'Oh snap! Change a few things up and try submitting again.' },
+    { type: 'success round', msg: 'Well done! You successfully read this important alert message.' }
+  ];
+
+  $scope.addAlert = function() {
+    $scope.alerts.push({type: 'alert', msg: "Another alert!"});
+  };
+
+  $scope.closeAlert = function(index) {
+    $scope.alerts.splice(index, 1);
+  };
+
+});
+</script>
+        
+          <section class="demo" id="buttons">
+            <div class="page-header">
+              <h1>Buttons<small>
+                (<a target="_blank" href="https://github.com/pineconellc/angular-foundation/tree/master/src/buttons">mm.foundation.buttons</a>)
+              </small></h1>
+            </div>
+            <div class="row">
+              <div class="columns medium-6 show-grid">
+                <div ng-controller="ButtonsCtrl">
+    <h4>Single toggle</h4>
+    <pre>{{singleModel}}</pre>
+    <button type="button" class="button" ng-model="singleModel" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+        Single Toggle
+    </button>
+    <h4>Checkbox</h4>
+    <pre>{{checkModel}}</pre>
+    <div class="button-group">
+        <button type="button" class="button" ng-model="checkModel.left" btn-checkbox>Left</button>
+        <button type="button" class="button" ng-model="checkModel.middle" btn-checkbox>Middle</button>
+        <button type="button" class="button" ng-model="checkModel.right" btn-checkbox>Right</button>
+    </div>
+    <h4>Radio</h4>
+    <pre>{{radioModel}}</pre>
+    <div class="button-group">
+        <button type="button" class="button" ng-model="radioModel" btn-radio="'Left'">Left</button>
+        <button type="button" class="button" ng-model="radioModel" btn-radio="'Middle'">Middle</button>
+        <button type="button" class="button" ng-model="radioModel" btn-radio="'Right'">Right</button>
+    </div>
+</div>
+
+              </div>
+              <div class="columns medium-6">
+                <p>There are 2 directives that can make a group of buttons to behave like a set of checkboxes or radio buttons.</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row code">
+              <div class="columns medium-12" ng-controller="PlunkerCtrl">
+                <div class="right">
+                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'buttons')"><i class="fa fa-edit"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                  <tab heading="Markup">
+                    <div plunker-content="markup">
+                      <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;ButtonsCtrl&quot;&gt;
+    &lt;h4&gt;Single toggle&lt;/h4&gt;
+    &lt;pre&gt;{{singleModel}}&lt;/pre&gt;
+    &lt;button type=&quot;button&quot; class=&quot;button&quot; ng-model=&quot;singleModel&quot; btn-checkbox btn-checkbox-true=&quot;1&quot; btn-checkbox-false=&quot;0&quot;&gt;
+        Single Toggle
+    &lt;/button&gt;
+    &lt;h4&gt;Checkbox&lt;/h4&gt;
+    &lt;pre&gt;{{checkModel}}&lt;/pre&gt;
+    &lt;div class=&quot;button-group&quot;&gt;
+        &lt;button type=&quot;button&quot; class=&quot;button&quot; ng-model=&quot;checkModel.left&quot; btn-checkbox&gt;Left&lt;/button&gt;
+        &lt;button type=&quot;button&quot; class=&quot;button&quot; ng-model=&quot;checkModel.middle&quot; btn-checkbox&gt;Middle&lt;/button&gt;
+        &lt;button type=&quot;button&quot; class=&quot;button&quot; ng-model=&quot;checkModel.right&quot; btn-checkbox&gt;Right&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;h4&gt;Radio&lt;/h4&gt;
+    &lt;pre&gt;{{radioModel}}&lt;/pre&gt;
+    &lt;div class=&quot;button-group&quot;&gt;
+        &lt;button type=&quot;button&quot; class=&quot;button&quot; ng-model=&quot;radioModel&quot; btn-radio=&quot;&#39;Left&#39;&quot;&gt;Left&lt;/button&gt;
+        &lt;button type=&quot;button&quot; class=&quot;button&quot; ng-model=&quot;radioModel&quot; btn-radio=&quot;&#39;Middle&#39;&quot;&gt;Middle&lt;/button&gt;
+        &lt;button type=&quot;button&quot; class=&quot;button&quot; ng-model=&quot;radioModel&quot; btn-radio=&quot;&#39;Right&#39;&quot;&gt;Right&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+                  </tab>
+                  <tab heading="JavaScript">
+                    <div plunker-content="javascript">
+                      <pre ng-non-bindable><code data-language="javascript">angular.module(&#39;foundationDemoApp&#39;).controller(&#39;ButtonsCtrl&#39;, function ($scope) {
+
+  $scope.singleModel = 1;
+
+  $scope.radioModel = &#39;Middle&#39;;
+
+  $scope.checkModel = {
+    left: false,
+    middle: true,
+    right: false
+  };
+});</code></pre>
+                    </div>
+                  </tab>
+                </tabset>
+              </div>
+            </div>
+          </section>
+          <script>angular.module('foundationDemoApp').controller('ButtonsCtrl', function ($scope) {
+
+  $scope.singleModel = 1;
+
+  $scope.radioModel = 'Middle';
+
+  $scope.checkModel = {
+    left: false,
+    middle: true,
+    right: false
+  };
+});</script>
+        
+          <section class="demo" id="dropdownToggle">
+            <div class="page-header">
+              <h1>Dropdown Toggle<small>
+                (<a target="_blank" href="https://github.com/pineconellc/angular-foundation/tree/master/src/dropdownToggle">mm.foundation.dropdownToggle</a>)
+              </small></h1>
+            </div>
+            <div class="row">
+              <div class="columns medium-6 show-grid">
+                <div ng-controller="DropdownCtrl">
+
+  <dropdown-toggle style="display: block;">
+    <toggle><a>Click me for a dropdown-toggle, yo!</a></toggle>
+    <pane>
+      <ul class="f-dropdown-toggle">
+        <li ng-repeat="choice in items">
+          <a>{{choice}}</a>
+        </li>
+      </ul>
+    </pane>
+  </dropdown-toggle>
+
+  <dropdown-toggle style="display: block;">
+    <toggle><a>dropdown-toggles can also have links!</a></toggle>
+    <pane>
+      <ul>
+        <li ng-repeat="(label, url) in linkItems">
+          <a href="{{url}}" target="_blank">{{label}}</a>
+        </li>
+      </ul>
+    </pane>
+  </dropdown-toggle>
+
+  <dropdown-toggle>
+    <toggle>
+      <a class="button split">
+        Split Button
+        <span dropdown-toggle-toggle="#dropdown-toggle-example-3"></span>
+      </a>
+    </toggle>
+    <pane>
+      <ul>
+        <li ng-repeat="choice in items">
+          <a>{{choice}}</a>
+        </li>
+      </ul>
+    </pane>
+  </dropdown-toggle>
+</div>
+
+              </div>
+              <div class="columns medium-6">
+                <p>DropdownToggle is a simple directive which will toggle a dropdown link on click.  Simply put it on the toggler-element, and it will find the target element and toggle it when the element matching the value of the <code>dropdown-toggle</code> attribute is clicked.</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row code">
+              <div class="columns medium-12" ng-controller="PlunkerCtrl">
+                <div class="right">
+                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'dropdownToggle')"><i class="fa fa-edit"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                  <tab heading="Markup">
+                    <div plunker-content="markup">
+                      <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;DropdownCtrl&quot;&gt;
+
+  &lt;dropdown-toggle style=&quot;display: block;&quot;&gt;
+    &lt;toggle&gt;&lt;a&gt;Click me for a dropdown-toggle, yo!&lt;/a&gt;&lt;/toggle&gt;
+    &lt;pane&gt;
+      &lt;ul class=&quot;f-dropdown-toggle&quot;&gt;
+        &lt;li ng-repeat=&quot;choice in items&quot;&gt;
+          &lt;a&gt;{{choice}}&lt;/a&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/pane&gt;
+  &lt;/dropdown-toggle&gt;
+
+  &lt;dropdown-toggle style=&quot;display: block;&quot;&gt;
+    &lt;toggle&gt;&lt;a&gt;dropdown-toggles can also have links!&lt;/a&gt;&lt;/toggle&gt;
+    &lt;pane&gt;
+      &lt;ul&gt;
+        &lt;li ng-repeat=&quot;(label, url) in linkItems&quot;&gt;
+          &lt;a href=&quot;{{url}}&quot; target=&quot;_blank&quot;&gt;{{label}}&lt;/a&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/pane&gt;
+  &lt;/dropdown-toggle&gt;
+
+  &lt;dropdown-toggle&gt;
+    &lt;toggle&gt;
+      &lt;a class=&quot;button split&quot;&gt;
+        Split Button
+        &lt;span dropdown-toggle-toggle=&quot;#dropdown-toggle-example-3&quot;&gt;&lt;/span&gt;
+      &lt;/a&gt;
+    &lt;/toggle&gt;
+    &lt;pane&gt;
+      &lt;ul&gt;
+        &lt;li ng-repeat=&quot;choice in items&quot;&gt;
+          &lt;a&gt;{{choice}}&lt;/a&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/pane&gt;
+  &lt;/dropdown-toggle&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+                  </tab>
+                  <tab heading="JavaScript">
+                    <div plunker-content="javascript">
+                      <pre ng-non-bindable><code data-language="javascript">angular.module(&#39;foundationDemoApp&#39;).controller(&#39;DropdownCtrl&#39;, function($scope) {
+  $scope.items = [
+    &quot;The first choice!&quot;,
+    &quot;And another choice for you.&quot;,
+    &quot;but wait! A third!&quot;
+  ];
+  $scope.linkItems = {
+    &quot;Google&quot;: &quot;http://google.com&quot;,
+    &quot;AltaVista&quot;: &quot;http://altavista.com&quot;
+  };
+});
+</code></pre>
+                    </div>
+                  </tab>
+                </tabset>
+              </div>
+            </div>
+          </section>
+          <script>angular.module('foundationDemoApp').controller('DropdownCtrl', function($scope) {
+  $scope.items = [
+    "The first choice!",
+    "And another choice for you.",
+    "but wait! A third!"
+  ];
+  $scope.linkItems = {
+    "Google": "http://google.com",
+    "AltaVista": "http://altavista.com"
+  };
+});
+</script>
+        
+          <section class="demo" id="modal">
+            <div class="page-header">
+              <h1>Modal<small>
+                (<a target="_blank" href="https://github.com/pineconellc/angular-foundation/tree/master/src/modal">mm.foundation.modal</a>)
+              </small></h1>
+            </div>
+            <div class="row">
+              <div class="columns medium-6 show-grid">
+                <div ng-controller="ModalDemoCtrl">
+  <script type="text/ng-template" id="myModalContent.html">
+    <h3>I'm a modal!</h3>
+    <ul>
+      <li ng-repeat="item in items">
+        <a ng-click="selected.item = item">{{ item }}</a>
+      </li>
+    </ul>
+    <p>Selected: <b>{{ selected.item }}</b></p>
+    <button class="button" ng-click="ok()">OK</button>
+    <button ng-click="cancel()" class="close-button" aria-label="Close reveal" type="button">
+        <span aria-hidden="true">&times;</span>
+    </button>
+  </script>
+
+  <button class="button" ng-click="open()">Open me!</button>
+  <div ng-show="selected">Selection from a modal: {{ selected }}</div>
+</div>
+
+              </div>
+              <div class="columns medium-6">
+                <p><code>$modal</code> is a service to quickly create AngularJS-powered modal windows. It is the equivalent of the <a href="http://foundation.zurb.com/docs/components/reveal.html">Foundation Reveal</a> component.
+Creating custom modals is straightforward: create a partial view, its controller and reference them when using the service.</p>
+
+<p>The <code>$modal</code> service has only one method: <code>open(options)</code> where available options are like follows:</p>
+
+<ul>
+<li><code>templateUrl</code> - a path to a template representing modal's content</li>
+<li><code>template</code> - inline template representing the modal's content</li>
+<li><code>scope</code> - a scope instance to be used for the modal's content (actually the <code>$modal</code> service is going to create a child scope of a provided scope). Defaults to <code>$rootScope</code></li>
+<li><code>controller</code> - a controller for a modal instance - it can initialize scope used by modal. Accepts the "controller-as" syntax, and can be injected with <code>$modalInstance</code></li>
+<li><code>controllerAs</code> - an alternative to the aforementioned "controller-as" syntax. This is intended for the case of when the <code>controller</code> option is assigned an anonymous or local function and thus the "controller-as" syntax couldn't be applied.</li>
+<li><code>resolve</code> - members that will be resolved and passed to the controller as locals; it is equivalent of the <code>resolve</code> property for AngularJS routes</li>
+<li><code>backdrop</code> - controls presence of a backdrop. Allowed values: true (default), false (no backdrop), <code>'static'</code> - backdrop is present but modal window is not closed when clicking outside of the modal window.</li>
+<li><code>keyboard</code> - indicates whether the dialog should be closable by hitting the ESC key, defaults to true</li>
+<li><code>windowClass</code> - additional CSS class(es) to be added to a modal window template</li>
+</ul>
+
+<p>The <code>open</code> method returns a modal instance, an object with the following properties:</p>
+
+<ul>
+<li><code>close(result)</code> - a method that can be used to close a modal, passing a result</li>
+<li><code>dismiss(reason)</code> - a method that can be used to dismiss a modal, passing a reason</li>
+<li><code>result</code> - a promise that is resolved when a modal is closed and rejected when a modal is dismissed</li>
+<li><code>opened</code> - a promise that is resolved when a modal gets opened after downloading content's template and resolving all variables</li>
+</ul>
+
+<p>In addition the scope associated with modal's content is augmented with 2 methods:</p>
+
+<ul>
+<li><code>$close(result)</code> - an alias for <code>$modalInstance.close()</code></li>
+<li><code>$dismiss(reason)</code> - an alias for <code>$modalInstance.dismiss()</code></li>
+</ul>
+
+<p>Those methods make it easy to close a modal window without a need to create a dedicated controller</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row code">
+              <div class="columns medium-12" ng-controller="PlunkerCtrl">
+                <div class="right">
+                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'modal')"><i class="fa fa-edit"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                  <tab heading="Markup">
+                    <div plunker-content="markup">
+                      <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;ModalDemoCtrl&quot;&gt;
+  &lt;script type=&quot;text/ng-template&quot; id=&quot;myModalContent.html&quot;&gt;
+    &lt;h3&gt;I&#39;m a modal!&lt;/h3&gt;
+    &lt;ul&gt;
+      &lt;li ng-repeat=&quot;item in items&quot;&gt;
+        &lt;a ng-click=&quot;selected.item = item&quot;&gt;{{ item }}&lt;/a&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;p&gt;Selected: &lt;b&gt;{{ selected.item }}&lt;/b&gt;&lt;/p&gt;
+    &lt;button class=&quot;button&quot; ng-click=&quot;ok()&quot;&gt;OK&lt;/button&gt;
+    &lt;button ng-click=&quot;cancel()&quot; class=&quot;close-button&quot; aria-label=&quot;Close reveal&quot; type=&quot;button&quot;&gt;
+        &lt;span aria-hidden=&quot;true&quot;&gt;&amp;times;&lt;/span&gt;
+    &lt;/button&gt;
+  &lt;/script&gt;
+
+  &lt;button class=&quot;button&quot; ng-click=&quot;open()&quot;&gt;Open me!&lt;/button&gt;
+  &lt;div ng-show=&quot;selected&quot;&gt;Selection from a modal: {{ selected }}&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+                  </tab>
+                  <tab heading="JavaScript">
+                    <div plunker-content="javascript">
+                      <pre ng-non-bindable><code data-language="javascript">angular.module(&#39;foundationDemoApp&#39;).controller(&#39;ModalDemoCtrl&#39;, function ($scope, $modal, $log) {
+
+  $scope.items = [&#39;item1&#39;, &#39;item2&#39;, &#39;item3&#39;];
+
+  // for(var i = 0; i &lt; 40; i++){
+  //   $scope.items.push(&#39;item &#39; + i);
+  // }
+
+  $scope.open = function () {
+
+    var modalInstance = $modal.open({
+      templateUrl: &#39;myModalContent.html&#39;,
+      controller: &#39;ModalInstanceCtrl&#39;,
+      resolve: {
+        items: function () {
+          return $scope.items;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $scope.selected = selectedItem;
+    }, function () {
+      $log.info(&#39;Modal dismissed at: &#39; + new Date());
+    });
+  };
+});
+
+// Please note that $modalInstance represents a modal window (instance) dependency.
+// It is not the same as the $modal service used above.
+
+angular.module(&#39;foundationDemoApp&#39;).controller(&#39;ModalInstanceCtrl&#39;, function ($scope, $modalInstance, items) {
+
+  $scope.items = items;
+  $scope.selected = {
+    item: $scope.items[0]
+  };
+
+  $scope.reposition = function () {
+    $modalInstance.reposition();
+  };
+
+  $scope.ok = function () {
+    $modalInstance.close($scope.selected.item);
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss(&#39;cancel&#39;);
+  };
+});
+</code></pre>
+                    </div>
+                  </tab>
+                </tabset>
+              </div>
+            </div>
+          </section>
+          <script>angular.module('foundationDemoApp').controller('ModalDemoCtrl', function ($scope, $modal, $log) {
+
+  $scope.items = ['item1', 'item2', 'item3'];
+
+  // for(var i = 0; i < 40; i++){
+  //   $scope.items.push('item ' + i);
+  // }
+
+  $scope.open = function () {
+
+    var modalInstance = $modal.open({
+      templateUrl: 'myModalContent.html',
+      controller: 'ModalInstanceCtrl',
+      resolve: {
+        items: function () {
+          return $scope.items;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $scope.selected = selectedItem;
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
+});
+
+// Please note that $modalInstance represents a modal window (instance) dependency.
+// It is not the same as the $modal service used above.
+
+angular.module('foundationDemoApp').controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+
+  $scope.items = items;
+  $scope.selected = {
+    item: $scope.items[0]
+  };
+
+  $scope.reposition = function () {
+    $modalInstance.reposition();
+  };
+
+  $scope.ok = function () {
+    $modalInstance.close($scope.selected.item);
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+});
+</script>
+        
+          <section class="demo" id="pagination">
+            <div class="page-header">
+              <h1>Pagination<small>
+                (<a target="_blank" href="https://github.com/pineconellc/angular-foundation/tree/master/src/pagination">mm.foundation.pagination</a>)
+              </small></h1>
+            </div>
+            <div class="row">
+              <div class="columns medium-6 show-grid">
+                <div ng-controller="PaginationDemoCtrl">
+    <h4>Default</h4>
+    <pagination total-items="totalItems" page="currentPage"></pagination>
+    <pagination boundary-links="true" total-items="totalItems" page="currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+    <pagination direction-links="false" boundary-links="true" total-items="totalItems" page="currentPage"></pagination>
+    <pagination direction-links="false" total-items="totalItems" page="currentPage" num-pages="smallnumPages"></pagination>
+    <pre>The selected page no: {{currentPage}}</pre>
+    <button class="button secondary" ng-click="setPage(3)">Set current page to: 3</button>
+
+    <hr />
+    <h4>Pager</h4>
+    <pager total-items="totalItems" page="currentPage"></pager>
+
+    <hr />
+    <h4>Limit the maximum visible buttons</h4>
+    <pagination total-items="bigTotalItems" page="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></pagination>
+    <pagination total-items="bigTotalItems" page="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+    <pre>Page: {{bigCurrentPage}} / {{numPages}}</pre>
+</div>
+
+              </div>
+              <div class="columns medium-6">
+                <p>A lightweight pagination directive that is focused on ... providing pagination &amp; will take care of visualising a pagination bar and enable / disable buttons correctly!</p>
+
+<h3>Pagination Settings</h3>
+
+<p>Settings can be provided as attributes in the <code>&lt;pagination&gt;</code> or globally configured through the <code>paginationConfig</code>.</p>
+
+<ul>
+<li><p><code>page</code> <i class="fa fa-eye"></i>
+ :
+ Current page number. First page is 1.</p></li>
+<li><p><code>total-items</code> <i class="fa fa-eye"></i>
+ :
+ Total number of items in all pages.</p></li>
+<li><p><code>items-per-page</code> <i class="fa fa-eye"></i>
+ <em>(Defaults: 10)</em> :
+ Maximum number of items per page. A value less than one indicates all items on one page.</p></li>
+<li><p><code>max-size</code> <i class="fa fa-eye"></i>
+ <em>(Defaults: null)</em> :
+ Limit number for pagination size.</p></li>
+<li><p><code>num-pages</code> <small class="badge">readonly</small>
+ <em>(Defaults: angular.noop)</em> :
+ An optional expression assigned the total number of pages to display.</p></li>
+<li><p><code>rotate</code>
+ <em>(Defaults: true)</em> :
+ Whether to keep current page in the middle of the visible ones.</p></li>
+<li><p><code>on-select-page (page)</code>
+ <em>(Default: null)</em> :
+ An optional expression called when a page is selected having the page number as argument.</p></li>
+<li><p><code>direction-links</code>
+ <em>(Default: true)</em> :
+ Whether to display Previous / Next buttons.</p></li>
+<li><p><code>previous-text</code>
+ <em>(Default: 'Previous')</em> :
+ Text for Previous button.</p></li>
+<li><p><code>next-text</code>
+ <em>(Default: 'Next')</em> :
+ Text for Next button.</p></li>
+<li><p><code>boundary-links</code>
+ <em>(Default: false)</em> :
+ Whether to display First / Last buttons.</p></li>
+<li><p><code>first-text</code>
+ <em>(Default: 'First')</em> :
+ Text for First button.</p></li>
+<li><p><code>last-text</code>
+ <em>(Default: 'Last')</em> :
+ Text for Last button.</p></li>
+</ul>
+
+<h3>Pager Settings</h3>
+
+<p>Settings can be provided as attributes in the <code>&lt;pager&gt;</code> or globally configured through the <code>pagerConfig</code>. <br />
+For <code>page</code>, <code>total-items</code>, <code>items-per-page</code>, <code>num-pages</code> and <code>on-select-page (page)</code> see pagination settings. Other settings are:</p>
+
+<ul>
+<li><p><code>align</code>
+ <em>(Default: true)</em> :
+ Whether to align each link to the sides.</p></li>
+<li><p><code>previous-text</code>
+ <em>(Default: '« Previous')</em> :
+ Text for Previous button.</p></li>
+<li><p><code>next-text</code>
+ <em>(Default: 'Next »')</em> :
+ Text for Next button.</p></li>
+</ul>
+              </div>
+            </div>
+            <hr>
+            <div class="row code">
+              <div class="columns medium-12" ng-controller="PlunkerCtrl">
+                <div class="right">
+                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'pagination')"><i class="fa fa-edit"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                  <tab heading="Markup">
+                    <div plunker-content="markup">
+                      <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;PaginationDemoCtrl&quot;&gt;
+    &lt;h4&gt;Default&lt;/h4&gt;
+    &lt;pagination total-items=&quot;totalItems&quot; page=&quot;currentPage&quot;&gt;&lt;/pagination&gt;
+    &lt;pagination boundary-links=&quot;true&quot; total-items=&quot;totalItems&quot; page=&quot;currentPage&quot; class=&quot;pagination-sm&quot; previous-text=&quot;&amp;lsaquo;&quot; next-text=&quot;&amp;rsaquo;&quot; first-text=&quot;&amp;laquo;&quot; last-text=&quot;&amp;raquo;&quot;&gt;&lt;/pagination&gt;
+    &lt;pagination direction-links=&quot;false&quot; boundary-links=&quot;true&quot; total-items=&quot;totalItems&quot; page=&quot;currentPage&quot;&gt;&lt;/pagination&gt;
+    &lt;pagination direction-links=&quot;false&quot; total-items=&quot;totalItems&quot; page=&quot;currentPage&quot; num-pages=&quot;smallnumPages&quot;&gt;&lt;/pagination&gt;
+    &lt;pre&gt;The selected page no: {{currentPage}}&lt;/pre&gt;
+    &lt;button class=&quot;button secondary&quot; ng-click=&quot;setPage(3)&quot;&gt;Set current page to: 3&lt;/button&gt;
+
+    &lt;hr /&gt;
+    &lt;h4&gt;Pager&lt;/h4&gt;
+    &lt;pager total-items=&quot;totalItems&quot; page=&quot;currentPage&quot;&gt;&lt;/pager&gt;
+
+    &lt;hr /&gt;
+    &lt;h4&gt;Limit the maximum visible buttons&lt;/h4&gt;
+    &lt;pagination total-items=&quot;bigTotalItems&quot; page=&quot;bigCurrentPage&quot; max-size=&quot;maxSize&quot; class=&quot;pagination-sm&quot; boundary-links=&quot;true&quot;&gt;&lt;/pagination&gt;
+    &lt;pagination total-items=&quot;bigTotalItems&quot; page=&quot;bigCurrentPage&quot; max-size=&quot;maxSize&quot; class=&quot;pagination-sm&quot; boundary-links=&quot;true&quot; rotate=&quot;false&quot; num-pages=&quot;numPages&quot;&gt;&lt;/pagination&gt;
+    &lt;pre&gt;Page: {{bigCurrentPage}} / {{numPages}}&lt;/pre&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+                  </tab>
+                  <tab heading="JavaScript">
+                    <div plunker-content="javascript">
+                      <pre ng-non-bindable><code data-language="javascript">angular.module(&#39;foundationDemoApp&#39;).controller(&#39;PaginationDemoCtrl&#39;, function ($scope) {
+  $scope.totalItems = 64;
+  $scope.currentPage = 4;
+  $scope.maxSize = 5;
+  
+  $scope.setPage = function (pageNo) {
+    $scope.currentPage = pageNo;
+  };
+
+  $scope.bigTotalItems = 175;
+  $scope.bigCurrentPage = 1;
+});
+</code></pre>
+                    </div>
+                  </tab>
+                </tabset>
+              </div>
+            </div>
+          </section>
+          <script>angular.module('foundationDemoApp').controller('PaginationDemoCtrl', function ($scope) {
+  $scope.totalItems = 64;
+  $scope.currentPage = 4;
+  $scope.maxSize = 5;
+  
+  $scope.setPage = function (pageNo) {
+    $scope.currentPage = pageNo;
+  };
+
+  $scope.bigTotalItems = 175;
+  $scope.bigCurrentPage = 1;
+});
+</script>
+        
+          <section class="demo" id="tabs">
+            <div class="page-header">
+              <h1>Tabs<small>
+                (<a target="_blank" href="https://github.com/pineconellc/angular-foundation/tree/master/src/tabs">mm.foundation.tabs</a>)
+              </small></h1>
+            </div>
+            <div class="row">
+              <div class="columns medium-6 show-grid">
+                <div ng-controller="TabsDemoCtrl">
+  <p>Select a tab by setting active binding to true:</p>
+  <p>
+    <button class="button small" ng-click="tabs[0].active = true">Select second tab</button>
+    <button class="button small" ng-click="tabs[1].active = true">Select third tab</button>
+  </p>
+  <hr />
+
+  <tabset>
+    <tab heading="Static title">Static content</tab>
+    <tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active">
+      {{tab.content}}
+    </tab>
+    <tab select="alertMe()">
+      <tab-heading>
+        <i class="fa fa-bell"></i> Alert!
+      </tab-heading>
+      I've got an HTML heading, and a select callback. Pretty cool!
+    </tab>
+  </tabset>
+
+  <hr />
+
+  <tabset vertical="true" type="navType">
+    <tab heading="Vertical 1">Vertical content 1</tab>
+    <tab heading="Vertical 2">Vertical content 2</tab>
+  </tabset>
+
+  <hr />
+</div>
+
+              </div>
+              <div class="columns medium-6">
+                <p>Foundation version of the tabs directive.</p>
+
+<h3>Settings</h3>
+
+<h4><code>&lt;tabset&gt;</code></h4>
+
+<ul>
+<li><p><code>vertical</code>
+ <em>(Defaults: false)</em> :
+ Whether tabs appear vertically stacked.</p></li>
+<li><p><code>open-on-load</code>
+<em>(Defaults: true)</em> :
+Whether to open an active tab automatically.</p></li>
+</ul>
+
+<h4><code>&lt;tab&gt;</code></h4>
+
+<ul>
+<li><p><code>heading</code> or <code>&lt;tab-heading&gt;</code>
+ :
+ Heading text or HTML markup.</p></li>
+<li><p><code>active</code> <i class="fa fa-eye"></i>
+ <em>(Defaults: false)</em> :
+ Whether tab is currently selected.</p></li>
+<li><p><code>select()</code>
+ <em>(Defaults: null)</em> :
+ An optional expression called when tab is activated.</p></li>
+</ul>
+              </div>
+            </div>
+            <hr>
+            <div class="row code">
+              <div class="columns medium-12" ng-controller="PlunkerCtrl">
+                <div class="right">
+                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'tabs')"><i class="fa fa-edit"></i> Edit in plunker</button>
+                </div>
+                <tabset>
+                  <tab heading="Markup">
+                    <div plunker-content="markup">
+                      <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;TabsDemoCtrl&quot;&gt;
+  &lt;p&gt;Select a tab by setting active binding to true:&lt;/p&gt;
+  &lt;p&gt;
+    &lt;button class=&quot;button small&quot; ng-click=&quot;tabs[0].active = true&quot;&gt;Select second tab&lt;/button&gt;
+    &lt;button class=&quot;button small&quot; ng-click=&quot;tabs[1].active = true&quot;&gt;Select third tab&lt;/button&gt;
+  &lt;/p&gt;
+  &lt;hr /&gt;
+
+  &lt;tabset&gt;
+    &lt;tab heading=&quot;Static title&quot;&gt;Static content&lt;/tab&gt;
+    &lt;tab ng-repeat=&quot;tab in tabs&quot; heading=&quot;{{tab.title}}&quot; active=&quot;tab.active&quot;&gt;
+      {{tab.content}}
+    &lt;/tab&gt;
+    &lt;tab select=&quot;alertMe()&quot;&gt;
+      &lt;tab-heading&gt;
+        &lt;i class=&quot;fa fa-bell&quot;&gt;&lt;/i&gt; Alert!
+      &lt;/tab-heading&gt;
+      I&#39;ve got an HTML heading, and a select callback. Pretty cool!
+    &lt;/tab&gt;
+  &lt;/tabset&gt;
+
+  &lt;hr /&gt;
+
+  &lt;tabset vertical=&quot;true&quot; type=&quot;navType&quot;&gt;
+    &lt;tab heading=&quot;Vertical 1&quot;&gt;Vertical content 1&lt;/tab&gt;
+    &lt;tab heading=&quot;Vertical 2&quot;&gt;Vertical content 2&lt;/tab&gt;
+  &lt;/tabset&gt;
+
+  &lt;hr /&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+                  </tab>
+                  <tab heading="JavaScript">
+                    <div plunker-content="javascript">
+                      <pre ng-non-bindable><code data-language="javascript">angular.module(&#39;foundationDemoApp&#39;).controller(&#39;TabsDemoCtrl&#39;, function ($scope) {
+  $scope.tabs = [
+    { title:&quot;Dynamic Title 1&quot;, content:&quot;Dynamic content 1&quot; },
+    { title:&quot;Dynamic Title 2&quot;, content:&quot;Dynamic content 2&quot; }
+  ];
+
+  $scope.alertMe = function() {
+    setTimeout(function() {
+      alert(&quot;You&#39;ve selected the alert tab!&quot;);
+    });
+  };
+});
+</code></pre>
+                    </div>
+                  </tab>
+                </tabset>
+              </div>
+            </div>
+          </section>
+          <script>angular.module('foundationDemoApp').controller('TabsDemoCtrl', function ($scope) {
+  $scope.tabs = [
+    { title:"Dynamic Title 1", content:"Dynamic content 1" },
+    { title:"Dynamic Title 2", content:"Dynamic content 2" }
+  ];
+
+  $scope.alertMe = function() {
+    setTimeout(function() {
+      alert("You've selected the alert tab!");
+    });
+  };
+});
+</script>
+        
+        <section id="animations">
+          <div class="page-header">
+            <h1>Animations</h1>
+            <p>Foundation includes animations in its JavaScript files but
+            the components above don't use Foundation's JavaScript.
+            You can use the official Angular module ngAnimate in your project
+            or simple CSS animations like the example below.</p>
+          </div>
+          <div class="row">
+            <div class="columns medium-12">
+            </div>
+          </div>
+          <hr>
+          <div class="row code">
+            <div class="columns medium-12">
+              <pre><code data-language="css">.fade {
+  opacity: 0;
+  transition: opacity .15s linear;
+}
+.fade.in {
+  opacity: 1;
+}
+
+.reveal.fade {
+  transition: transform .3s ease-out;
+  transform: translate(0, -25%);
+}
+.reveal.in {
+  transform: translate(0, 0);
+}
+
+.reveal-bg.fade {
+  filter: alpha(opacity=0);
+  opacity: 0;
+}
+.reveal-bg.in {
+  filter: alpha(opacity=50);
+  opacity: .5;
+}</code></pre>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div><!-- /.container -->
+</div><!-- /.main -->
+<footer class="footer">
+  <div class="container">
+    <p>Code licensed under <a href="https://github.com/pineconellc/angular-foundation/blob/master/LICENSE">MIT License</a>.</p>
+    <p><a href="https://github.com/pineconellc/angular-foundation/issues?state=open">Issues</a></p>
+  </div>
+</footer>
+<script src="assets/rainbow.js"></script>
+<script src="assets/rainbow-generic.js"></script>
+<script src="assets/rainbow-javascript.js"></script>
+<script src="assets/rainbow-html.js"></script>
+<script type="text/ng-template" id="downloadModal.html">
+  <div class="modal-header"><h4 class="modal-title">Download Angular UI Bootstrap</h4></div>
+  <div class="modal-body">
+    <form class="form-horizontal">
+      <div class="form-group">
+        <label class="col-sm-3 control-label"><strong>Build</strong></label>
+        <div class="col-sm-9">
+          <span class="button-group">
+            <button type="button" class="button" ng-model="options.minified" btn-radio="true">Minified</button>
+            <button type="button" class="button" ng-model="options.minified" btn-radio="false">Uncompressed</button>
+          </span>
+          <small class="help-block">Use <b>Minified</b> version in your deployed application. <b>Uncompressed</b> source code is useful only for debugging and development purpose.</small>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3 control-label"><strong>Include Templates</strong></label>
+        <div class="col-sm-9">
+          <span class="button-group">
+            <button type="button" class="button" ng-model="options.tpls" btn-radio="true">Yes</button>
+            <button type="button" class="button" ng-model="options.tpls" btn-radio="false">No</button>
+          </span>
+          <small class="help-block">Whether you want to include the <i>default templates</i>, bundled with most of the directives. These templates are based on Bootstrap's markup and CSS.</small>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3 control-label"><strong>Bower</strong></label>
+        <div class="col-sm-9">
+          <small>If you are using Bower just run:</small>
+          <pre>bower install angular-foundation</pre>
+          <small class="help-block"><a href="http://bower.io/" target="_blank">Bower</a> is a package manager for the web.</small>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <a class="button" ng-click="cancel()">Cancel</a>
+    <a class="button" ng-click="download('0.9.0')"><i class="fa fa-download"></i> Download 0.9.0</a>
+  </div>
+</script>
+
+<!-- <script src="assets/smoothscroll-angular-custom.js"></script> -->
+</body>
+</html>

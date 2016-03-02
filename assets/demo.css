@@ -1,0 +1,61 @@
+img.logo {
+  margin: 50px auto 50px auto;
+  width: 275px; }
+
+.ng-cloak {
+  opacity: 0; }
+
+.ng-invalid {
+  border: 1px solid red !important; }
+
+div[role=main] section.demo {
+  padding-top: 30px; }
+
+.page-header h1, .page-header h1 > small > a {
+  color: #266784; }
+
+.page-header h1 > small > a:hover {
+  text-decoration: none; }
+
+.footer {
+  text-align: center;
+  padding: 30px 0;
+  margin-top: 70px;
+  border-top: 1px solid #e5e5e5;
+  background-color: #f5f5f5; }
+
+@media only screen and (max-device-width: 480px) {
+  #plunk-btn {
+    display: none; } }
+
+/**
+ * Animations
+ */
+.fade {
+  opacity: 0;
+  transition: opacity .15s linear; }
+
+.fade.in {
+  opacity: 1; }
+
+.reveal.fade {
+  transition: -webkit-transform .3s ease-out;
+  transition: transform .3s ease-out;
+  transition: transform .3s ease-out, -webkit-transform .3s ease-out;
+  -webkit-transform: translate(0, -25%);
+  transform: translate(0, -25%); }
+
+.reveal.in {
+  -webkit-transform: translate(0, 0);
+  transform: translate(0, 0); }
+
+.reveal-bg.fade {
+  filter: alpha(opacity=0);
+  opacity: 0; }
+
+.reveal-bg.in {
+  filter: alpha(opacity=50);
+  opacity: .5; }
+
+.alert-box {
+  background-color: #5592BB; }
