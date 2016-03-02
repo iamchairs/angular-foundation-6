@@ -2,27 +2,24 @@ img.logo {
   margin: 50px auto 50px auto;
   width: 275px; }
 
-.ng-cloak {
-  opacity: 0; }
-
-.ng-invalid {
-  border: 1px solid red !important; }
-
-div[role=main] section.demo {
-  padding-top: 30px; }
-
-.page-header h1, .page-header h1 > small > a {
-  color: #266784; }
-
-.page-header h1 > small > a:hover {
-  text-decoration: none; }
-
 .footer {
   text-align: center;
   padding: 30px 0;
   margin-top: 70px;
   border-top: 1px solid #e5e5e5;
   background-color: #f5f5f5; }
+
+.code pre, .code code {
+  border: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0; }
+
+.tabs dd.active a {
+  background-color: #FFF; }
+
+.code .tabs-content > .content {
+  padding: 0;
+  width: 100%; }
 
 @media only screen and (max-device-width: 480px) {
   #plunk-btn {
