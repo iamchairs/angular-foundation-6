@@ -12,6 +12,7 @@
 
   <script src="//cdnjs.cloudflare.com/ajax/libs/fastclick/0.6.7/fastclick.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-animate.min.js"></script>
   <script src="mm-foundation-tpls-0.9.0.js"></script>
   <script src="assets/plunker.js"></script>
   <script src="assets/app.js"></script>
@@ -145,11 +146,10 @@
 
               </div>
               <div class="columns medium-6">
-                <p>The <strong>accordion directive</strong> builds on top of the collapse directive to provide a list of items, with collapsible bodies that are collapsed or expanded by clicking on the item's header.</p>
-
+                <p>The <strong>accordion directive</strong> builds on top of the collapse directive to provide a list of items, with collapsible bodies that are collapsed or expanded by clicking on the item&#39;s header.</p>
 <p>We can control whether expanding an item will cause the other items to close, using the <code>close-others</code> attribute on accordion.</p>
-
 <p>The body of each accordion group is transcluded in to the body of the collapsible element.</p>
+
               </div>
             </div>
             <hr>
@@ -258,11 +258,10 @@
 
               </div>
               <div class="columns medium-6">
-                <p>Alert is an AngularJS-version of Foundation's alert.</p>
-
+                <p>Alert is an AngularJS-version of Foundation&#39;s alert.</p>
 <p>This directive can be used to generate alerts from the dynamic model data (using the ng-repeat directive);</p>
+<p>The presence of the &quot;close&quot; attribute determines if a close button is displayed</p>
 
-<p>The presence of the "close" attribute determines if a close button is displayed</p>
               </div>
             </div>
             <hr>
@@ -355,6 +354,7 @@
               </div>
               <div class="columns medium-6">
                 <p>There are 2 directives that can make a group of buttons to behave like a set of checkboxes or radio buttons.</p>
+
               </div>
             </div>
             <hr>
@@ -475,6 +475,7 @@
               </div>
               <div class="columns medium-6">
                 <p>DropdownToggle is a simple directive which will toggle a dropdown link on click.  Simply put it on the toggler-element, and it will find the target element and toggle it when the element matching the value of the <code>dropdown-toggle</code> attribute is clicked.</p>
+
               </div>
             </div>
             <hr>
@@ -593,38 +594,32 @@
               <div class="columns medium-6">
                 <p><code>$modal</code> is a service to quickly create AngularJS-powered modal windows. It is the equivalent of the <a href="http://foundation.zurb.com/docs/components/reveal.html">Foundation Reveal</a> component.
 Creating custom modals is straightforward: create a partial view, its controller and reference them when using the service.</p>
-
 <p>The <code>$modal</code> service has only one method: <code>open(options)</code> where available options are like follows:</p>
-
 <ul>
-<li><code>templateUrl</code> - a path to a template representing modal's content</li>
-<li><code>template</code> - inline template representing the modal's content</li>
-<li><code>scope</code> - a scope instance to be used for the modal's content (actually the <code>$modal</code> service is going to create a child scope of a provided scope). Defaults to <code>$rootScope</code></li>
-<li><code>controller</code> - a controller for a modal instance - it can initialize scope used by modal. Accepts the "controller-as" syntax, and can be injected with <code>$modalInstance</code></li>
-<li><code>controllerAs</code> - an alternative to the aforementioned "controller-as" syntax. This is intended for the case of when the <code>controller</code> option is assigned an anonymous or local function and thus the "controller-as" syntax couldn't be applied.</li>
+<li><code>templateUrl</code> - a path to a template representing modal&#39;s content</li>
+<li><code>template</code> - inline template representing the modal&#39;s content</li>
+<li><code>scope</code> - a scope instance to be used for the modal&#39;s content (actually the <code>$modal</code> service is going to create a child scope of a provided scope). Defaults to <code>$rootScope</code></li>
+<li><code>controller</code> - a controller for a modal instance - it can initialize scope used by modal. Accepts the &quot;controller-as&quot; syntax, and can be injected with <code>$modalInstance</code></li>
+<li><code>controllerAs</code> - an alternative to the aforementioned &quot;controller-as&quot; syntax. This is intended for the case of when the <code>controller</code> option is assigned an anonymous or local function and thus the &quot;controller-as&quot; syntax couldn&#39;t be applied.</li>
 <li><code>resolve</code> - members that will be resolved and passed to the controller as locals; it is equivalent of the <code>resolve</code> property for AngularJS routes</li>
-<li><code>backdrop</code> - controls presence of a backdrop. Allowed values: true (default), false (no backdrop), <code>'static'</code> - backdrop is present but modal window is not closed when clicking outside of the modal window.</li>
+<li><code>backdrop</code> - controls presence of a backdrop. Allowed values: true (default), false (no backdrop), <code>&#39;static&#39;</code> - backdrop is present but modal window is not closed when clicking outside of the modal window.</li>
 <li><code>keyboard</code> - indicates whether the dialog should be closable by hitting the ESC key, defaults to true</li>
 <li><code>windowClass</code> - additional CSS class(es) to be added to a modal window template</li>
 </ul>
-
 <p>The <code>open</code> method returns a modal instance, an object with the following properties:</p>
-
 <ul>
 <li><code>close(result)</code> - a method that can be used to close a modal, passing a result</li>
 <li><code>dismiss(reason)</code> - a method that can be used to dismiss a modal, passing a reason</li>
 <li><code>result</code> - a promise that is resolved when a modal is closed and rejected when a modal is dismissed</li>
-<li><code>opened</code> - a promise that is resolved when a modal gets opened after downloading content's template and resolving all variables</li>
+<li><code>opened</code> - a promise that is resolved when a modal gets opened after downloading content&#39;s template and resolving all variables</li>
 </ul>
-
-<p>In addition the scope associated with modal's content is augmented with 2 methods:</p>
-
+<p>In addition the scope associated with modal&#39;s content is augmented with 2 methods:</p>
 <ul>
 <li><code>$close(result)</code> - an alias for <code>$modalInstance.close()</code></li>
 <li><code>$dismiss(reason)</code> - an alias for <code>$modalInstance.dismiss()</code></li>
 </ul>
-
 <p>Those methods make it easy to close a modal window without a need to create a dedicated controller</p>
+
               </div>
             </div>
             <hr>
@@ -799,69 +794,79 @@ angular.module('foundationDemoApp').controller('ModalInstanceCtrl', function ($s
               </div>
               <div class="columns medium-6">
                 <p>A lightweight pagination directive that is focused on ... providing pagination &amp; will take care of visualising a pagination bar and enable / disable buttons correctly!</p>
-
-<h3>Pagination Settings</h3>
-
+<h3 id="pagination-settings">Pagination Settings</h3>
 <p>Settings can be provided as attributes in the <code>&lt;pagination&gt;</code> or globally configured through the <code>paginationConfig</code>.</p>
-
 <ul>
 <li><p><code>page</code> <i class="fa fa-eye"></i>
- :
- Current page number. First page is 1.</p></li>
+  :
+  Current page number. First page is 1.</p>
+</li>
 <li><p><code>total-items</code> <i class="fa fa-eye"></i>
- :
- Total number of items in all pages.</p></li>
+  :
+  Total number of items in all pages.</p>
+</li>
 <li><p><code>items-per-page</code> <i class="fa fa-eye"></i>
- <em>(Defaults: 10)</em> :
- Maximum number of items per page. A value less than one indicates all items on one page.</p></li>
+  <em>(Defaults: 10)</em> :
+  Maximum number of items per page. A value less than one indicates all items on one page.</p>
+</li>
 <li><p><code>max-size</code> <i class="fa fa-eye"></i>
- <em>(Defaults: null)</em> :
- Limit number for pagination size.</p></li>
+  <em>(Defaults: null)</em> :
+  Limit number for pagination size.</p>
+</li>
 <li><p><code>num-pages</code> <small class="badge">readonly</small>
- <em>(Defaults: angular.noop)</em> :
- An optional expression assigned the total number of pages to display.</p></li>
+  <em>(Defaults: angular.noop)</em> :
+  An optional expression assigned the total number of pages to display.</p>
+</li>
 <li><p><code>rotate</code>
- <em>(Defaults: true)</em> :
- Whether to keep current page in the middle of the visible ones.</p></li>
+  <em>(Defaults: true)</em> :
+  Whether to keep current page in the middle of the visible ones.</p>
+</li>
 <li><p><code>on-select-page (page)</code>
- <em>(Default: null)</em> :
- An optional expression called when a page is selected having the page number as argument.</p></li>
+  <em>(Default: null)</em> :
+  An optional expression called when a page is selected having the page number as argument.</p>
+</li>
 <li><p><code>direction-links</code>
- <em>(Default: true)</em> :
- Whether to display Previous / Next buttons.</p></li>
+  <em>(Default: true)</em> :
+  Whether to display Previous / Next buttons.</p>
+</li>
 <li><p><code>previous-text</code>
- <em>(Default: 'Previous')</em> :
- Text for Previous button.</p></li>
+  <em>(Default: &#39;Previous&#39;)</em> :
+  Text for Previous button.</p>
+</li>
 <li><p><code>next-text</code>
- <em>(Default: 'Next')</em> :
- Text for Next button.</p></li>
+  <em>(Default: &#39;Next&#39;)</em> :
+  Text for Next button.</p>
+</li>
 <li><p><code>boundary-links</code>
- <em>(Default: false)</em> :
- Whether to display First / Last buttons.</p></li>
+  <em>(Default: false)</em> :
+  Whether to display First / Last buttons.</p>
+</li>
 <li><p><code>first-text</code>
- <em>(Default: 'First')</em> :
- Text for First button.</p></li>
+  <em>(Default: &#39;First&#39;)</em> :
+  Text for First button.</p>
+</li>
 <li><p><code>last-text</code>
- <em>(Default: 'Last')</em> :
- Text for Last button.</p></li>
+  <em>(Default: &#39;Last&#39;)</em> :
+  Text for Last button.</p>
+</li>
 </ul>
-
-<h3>Pager Settings</h3>
-
-<p>Settings can be provided as attributes in the <code>&lt;pager&gt;</code> or globally configured through the <code>pagerConfig</code>. <br />
-For <code>page</code>, <code>total-items</code>, <code>items-per-page</code>, <code>num-pages</code> and <code>on-select-page (page)</code> see pagination settings. Other settings are:</p>
-
+<h3 id="pager-settings">Pager Settings</h3>
+<p>Settings can be provided as attributes in the <code>&lt;pager&gt;</code> or globally configured through the <code>pagerConfig</code>.<br>For <code>page</code>, <code>total-items</code>, <code>items-per-page</code>, <code>num-pages</code> and <code>on-select-page (page)</code> see pagination settings. Other settings are:</p>
 <ul>
 <li><p><code>align</code>
- <em>(Default: true)</em> :
- Whether to align each link to the sides.</p></li>
+  <em>(Default: true)</em> :
+  Whether to align each link to the sides.</p>
+</li>
 <li><p><code>previous-text</code>
- <em>(Default: '« Previous')</em> :
- Text for Previous button.</p></li>
+  <em>(Default: &#39;« Previous&#39;)</em> :
+  Text for Previous button.</p>
+</li>
 <li><p><code>next-text</code>
- <em>(Default: 'Next »')</em> :
- Text for Next button.</p></li>
+  <em>(Default: &#39;Next »&#39;)</em> :
+  Text for Next button.</p>
+</li>
 </ul>
+
               </div>
             </div>
             <hr>
@@ -972,33 +977,34 @@ For <code>page</code>, <code>total-items</code>, <code>items-per-page</code>, <c
               </div>
               <div class="columns medium-6">
                 <p>Foundation version of the tabs directive.</p>
-
-<h3>Settings</h3>
-
-<h4><code>&lt;tabset&gt;</code></h4>
-
+<h3 id="settings">Settings</h3>
+<h4 id="-tabset-"><code>&lt;tabset&gt;</code></h4>
 <ul>
 <li><p><code>vertical</code>
- <em>(Defaults: false)</em> :
- Whether tabs appear vertically stacked.</p></li>
+  <em>(Defaults: false)</em> :
+  Whether tabs appear vertically stacked.</p>
+</li>
 <li><p><code>open-on-load</code>
 <em>(Defaults: true)</em> :
-Whether to open an active tab automatically.</p></li>
+Whether to open an active tab automatically.</p>
+</li>
 </ul>
-
-<h4><code>&lt;tab&gt;</code></h4>
-
+<h4 id="-tab-"><code>&lt;tab&gt;</code></h4>
 <ul>
 <li><p><code>heading</code> or <code>&lt;tab-heading&gt;</code>
- :
- Heading text or HTML markup.</p></li>
+  :
+  Heading text or HTML markup.</p>
+</li>
 <li><p><code>active</code> <i class="fa fa-eye"></i>
- <em>(Defaults: false)</em> :
- Whether tab is currently selected.</p></li>
+  <em>(Defaults: false)</em> :
+  Whether tab is currently selected.</p>
+</li>
 <li><p><code>select()</code>
- <em>(Defaults: null)</em> :
- An optional expression called when tab is activated.</p></li>
+  <em>(Defaults: null)</em> :
+  An optional expression called when tab is activated.</p>
+</li>
 </ul>
+
               </div>
             </div>
             <hr>
@@ -1081,10 +1087,7 @@ Whether to open an active tab automatically.</p></li>
         <section id="animations">
           <div class="page-header">
             <h1>Animations</h1>
-            <p>Foundation includes animations in its JavaScript files but
-            the components above don't use Foundation's JavaScript.
-            You can use the official Angular module ngAnimate in your project
-            or simple CSS animations like the example below.</p>
+            <p>Animations are supported via ngAnimate. This can be used in conjuction with Zurb's <a href="https://github.com/zurb/motion-ui">MotionUI library.</a></p>
           </div>
           <div class="row">
             <div class="columns medium-12">
@@ -1093,29 +1096,44 @@ Whether to open an active tab automatically.</p></li>
           <hr>
           <div class="row code">
             <div class="columns medium-12">
-              <pre><code data-language="css">.fade {
-  opacity: 0;
-  transition: opacity .15s linear;
-}
-.fade.in {
-  opacity: 1;
+              <pre><code data-language="scss">$motion-ui-classes: (
+  chain: true,
+  prefix: 'ng-',
+  active: '-active',
+);
+
+@import 'motion-ui';
+
+.reveal-overlay {
+    @include mui-fade($state: in);
 }
 
-.reveal.fade {
-  transition: transform .3s ease-out;
-  transform: translate(0, -25%);
-}
-.reveal.in {
-  transform: translate(0, 0);
+.reveal-overlay {
+    @include mui-fade(
+        $state: out,
+        $from: 1,
+        $to: 0
+    );
 }
 
-.reveal-bg.fade {
-  filter: alpha(opacity=0);
-  opacity: 0;
+.reveal {
+    @include mui-slide(
+        $state: in, // Specify in or out
+        $direction: down, // Can be top, right, bottom, or left
+        $fade: true, // If true, the element fades simultaneously
+        $duration: 0.25s,
+        $timing: cubic-bezier,
+        $delay: 0s
+    );
 }
-.reveal-bg.in {
-  filter: alpha(opacity=50);
-  opacity: .5;
+
+.reveal {
+    @include mui-zoom(
+        $state: out,
+        $from: 1,
+        $to: 0,
+        $duration: 0.25s
+    );
 }</code></pre>
             </div>
           </div>

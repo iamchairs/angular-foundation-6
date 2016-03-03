@@ -1,25 +1,28 @@
-/*
- * angular-mm-foundation
- * http://pineconellc.github.io/angular-foundation/
+'use strict';
 
- * Version: 0.9.0 - 2016-03-02
+/*
+ * angular-foundation-6
+ * http://circlingthesun.github.io/angular-foundation-6/
+
+ * Version: 0.9.0 - 2016-03-03
  * License: MIT
- * (c) Pinecone, LLC
+ * (c) 
  */
 
 AccordionController.$inject = ['$scope', '$attrs', 'accordionConfig'];
 DropdownToggleController.$inject = ['$scope', '$attrs', 'mediaQueries', '$element', '$position', '$window'];
 function AccordionController($scope, $attrs, accordionConfig) {
     'ngInject';
+
     var $ctrl = this;
     // This array keeps track of the accordion groups
     $ctrl.groups = [];
 
     // Ensure that all the groups in this accordion are closed, unless close-others explicitly says not to
-    $ctrl.closeOthers = function(openGroup) {
+    $ctrl.closeOthers = function (openGroup) {
         var closeOthers = angular.isDefined($attrs.closeOthers) ? $scope.$eval($attrs.closeOthers) : accordionConfig.closeOthers;
         if (closeOthers) {
-            angular.forEach(this.groups, function(group) {
+            angular.forEach(this.groups, function (group) {
                 if (group !== openGroup) {
                     group.isOpen = false;
                 }
@@ -28,33 +31,29 @@ function AccordionController($scope, $attrs, accordionConfig) {
     };
 
     // This is called from the accordion-group directive to add itself to the accordion
-    $ctrl.addGroup = function(groupScope) {
+    $ctrl.addGroup = function (groupScope) {
         var that = this;
         this.groups.push(groupScope);
     };
 
     // This is called from the accordion-group directive when to remove itself
-    $ctrl.removeGroup = function(group) {
+    $ctrl.removeGroup = function (group) {
         var index = this.groups.indexOf(group);
         if (index !== -1) {
             this.groups.splice(index, 1);
         }
     };
-
 }
 
-angular.module('mm.foundation.accordion', [])
-
-.constant('accordionConfig', {
+angular.module('mm.foundation.accordion', []).constant('accordionConfig', {
     closeOthers: true
-})
-
-.controller('AccordionController', AccordionController)
+}).controller('AccordionController', AccordionController)
 
 // The accordion directive simply sets up the directive controller
 // and adds an accordion CSS class to itself element.
-.directive('accordion', function() {
+.directive('accordion', function () {
     'ngInject';
+
     return {
         restrict: 'EA',
         controller: AccordionController,
@@ -66,10 +65,11 @@ angular.module('mm.foundation.accordion', [])
 })
 
 // The accordion-group directive indicates a block of html that will expand and collapse in an accordion
-.directive('accordionGroup', function() {
+.directive('accordionGroup', function () {
     'ngInject';
+
     return {
-        require: {'accordion': '^accordion'}, // We need this directive to be inside an accordion
+        require: { 'accordion': '^accordion' }, // We need this directive to be inside an accordion
         restrict: 'EA',
         transclude: true, // It transcludes the contents of the directive into the template
         replace: true, // The element containing the directive will be replaced with the template
@@ -81,18 +81,18 @@ angular.module('mm.foundation.accordion', [])
         }, // Create an isolated scope and interpolate the heading attribute onto this scope
         controller: ['$scope', '$attrs', '$parse', function accordionGroupController($scope, $attrs, $parse) {
             'ngInject';
+
             var $ctrl = this;
             $ctrl.isOpen = false;
 
-            $ctrl.setHTMLHeading = function(element) {
+            $ctrl.setHTMLHeading = function (element) {
                 $ctrl.HTMLHeading = element;
             };
-
 
             $ctrl.$onInit = function () {
                 $ctrl.accordion.addGroup($ctrl);
 
-                $scope.$on('$destroy', function(event) {
+                $scope.$on('$destroy', function (event) {
                     $ctrl.accordion.removeGroup($ctrl);
                 });
 
@@ -103,12 +103,14 @@ angular.module('mm.foundation.accordion', [])
                     getIsOpen = $parse($attrs.isOpen);
                     setIsOpen = getIsOpen.assign;
 
-                    $scope.$parent.$watch(getIsOpen, function(value) {
+                    $scope.$parent.$watch(getIsOpen, function (value) {
                         $ctrl.isOpen = !!value;
                     });
                 }
 
-                $scope.$watch(function(){return $ctrl.isOpen;}, function(value) {
+                $scope.$watch(function () {
+                    return $ctrl.isOpen;
+                }, function (value) {
                     if (value) {
                         $ctrl.accordion.closeOthers($ctrl);
                     }
@@ -123,8 +125,9 @@ angular.module('mm.foundation.accordion', [])
 // <accordion-group>
 //   <accordion-heading>Heading containing HTML - <img src="..."></accordion-heading>
 // </accordion-group>
-.directive('accordionHeading', function() {
+.directive('accordionHeading', function () {
     'ngInject';
+
     return {
         restrict: 'EA',
         transclude: true, // Grab the contents to be used as the heading
@@ -135,7 +138,7 @@ angular.module('mm.foundation.accordion', [])
             // Pass the heading to the accordion-group controller
             // so that it can be transcluded into the right place in the template
             // [The second parameter to transclude causes the elements to be cloned so that they work in ng-repeat]
-            accordionGroupCtrl.setHTMLHeading(transclude(scope, function() {}));
+            accordionGroupCtrl.setHTMLHeading(transclude(scope, function () {}));
         }
     };
 })
@@ -146,14 +149,15 @@ angular.module('mm.foundation.accordion', [])
 //   <div class="accordion-heading" ><a ... accordion-transclude="heading">...</a></div>
 //   ...
 // </div>
-.directive('accordionTransclude', function() {
+.directive('accordionTransclude', function () {
     'ngInject';
+
     return {
         require: '^accordionGroup',
-        link: function(scope, element, attr, accordionGroupController) {
-            scope.$watch(function() {
+        link: function link(scope, element, attr, accordionGroupController) {
+            scope.$watch(function () {
                 return accordionGroupController.HTMLHeading;
-            }, function(heading) {
+            }, function (heading) {
                 if (heading) {
                     element.html('');
                     element.append(heading);
@@ -163,17 +167,19 @@ angular.module('mm.foundation.accordion', [])
     };
 });
 
-(function(){angular.module("mm.foundation.accordion").run(["$templateCache", function($templateCache) {$templateCache.put("template/accordion/accordion-group.html","<li class=\"accordion-item\" ng-class=\"{ \'is-active\': $ctrl.isOpen }\">\n  <a ng-click=\"$ctrl.isOpen = !$ctrl.isOpen\" class=\"accordion-title\" accordion-transclude>{{$ctrl.heading}}</a>\n  <div class=\"accordion-content\" ng-style=\"{display: $ctrl.isOpen ? \'block\' : \'none\'}\" ng-transclude></div>\n</li>\n");
-$templateCache.put("template/accordion/accordion.html","<ul class=\"accordion\" ng-transclude></ul>\n");}]);})();
-angular.module("mm.foundation.alert", [])
-
-.controller('AlertController', ['$scope', '$attrs', function($scope, $attrs) {
+(function () {
+    angular.module("mm.foundation.accordion").run(["$templateCache", function ($templateCache) {
+        $templateCache.put("template/accordion/accordion-group.html", "<li class=\"accordion-item\" ng-class=\"{ \'is-active\': $ctrl.isOpen }\">\n  <a ng-click=\"$ctrl.isOpen = !$ctrl.isOpen\" class=\"accordion-title\" accordion-transclude>{{$ctrl.heading}}</a>\n  <div class=\"accordion-content\" ng-style=\"{display: $ctrl.isOpen ? \'block\' : \'none\'}\" ng-transclude></div>\n</li>\n");
+        $templateCache.put("template/accordion/accordion.html", "<ul class=\"accordion\" ng-transclude></ul>\n");
+    }]);
+})();
+angular.module("mm.foundation.alert", []).controller('AlertController', ['$scope', '$attrs', function ($scope, $attrs) {
     'ngInject';
+
     $scope.closeable = 'close' in $attrs && typeof $attrs.close !== "undefined";
-}])
-
-.directive('alert', function() {
+}]).directive('alert', function () {
     'ngInject';
+
     return {
         restrict: 'EA',
         controller: 'AlertController',
@@ -187,12 +193,15 @@ angular.module("mm.foundation.alert", [])
     };
 });
 
-(function(){angular.module("mm.foundation.alert").run(["$templateCache", function($templateCache) {$templateCache.put("template/alert/alert.html","<div class=\"callout\" ng-class=\'(type || \"\")\'>\n  <span ng-transclude></span>\n  <button ng-click=\"close()\" ng-show=\"closeable\" class=\"close-button\" aria-label=\"Close alert\" type=\"button\">\n      <span aria-hidden=\"true\">&times;</span>\n  </button>\n</div>\n");}]);})();
-angular.module('mm.foundation.bindHtml', [])
-
-.directive('bindHtmlUnsafe', function() {
+(function () {
+    angular.module("mm.foundation.alert").run(["$templateCache", function ($templateCache) {
+        $templateCache.put("template/alert/alert.html", "<div class=\"callout\" ng-class=\'(type || \"\")\'>\n  <span ng-transclude></span>\n  <button ng-click=\"close()\" ng-show=\"closeable\" class=\"close-button\" aria-label=\"Close alert\" type=\"button\">\n      <span aria-hidden=\"true\">&times;</span>\n  </button>\n</div>\n");
+    }]);
+})();
+angular.module('mm.foundation.bindHtml', []).directive('bindHtmlUnsafe', function () {
     'ngInject';
-    return function(scope, element, attr) {
+
+    return function (scope, element, attr) {
         element.addClass('ng-binding').data('$binding', attr.bindHtmlUnsafe);
         scope.$watch(attr.bindHtmlUnsafe, function bindHtmlUnsafeWatchAction(value) {
             element.html(value || '');
@@ -200,36 +209,31 @@ angular.module('mm.foundation.bindHtml', [])
     };
 });
 
-angular.module('mm.foundation.buttons', [])
-
-.constant('buttonConfig', {
+angular.module('mm.foundation.buttons', []).constant('buttonConfig', {
     activeClass: 'active',
     toggleEvent: 'click'
-})
-
-.controller('ButtonsController', ['buttonConfig', function(buttonConfig) {
+}).controller('ButtonsController', ['buttonConfig', function (buttonConfig) {
     this.activeClass = buttonConfig.activeClass;
     this.toggleEvent = buttonConfig.toggleEvent;
-}])
-
-.directive('btnRadio', function() {
+}]).directive('btnRadio', function () {
     'ngInject';
+
     return {
         require: ['btnRadio', 'ngModel'],
         controller: 'ButtonsController',
-        link: function(scope, element, attrs, ctrls) {
+        link: function link(scope, element, attrs, ctrls) {
             var buttonsCtrl = ctrls[0],
                 ngModelCtrl = ctrls[1];
 
             //model -> UI
-            ngModelCtrl.$render = function() {
+            ngModelCtrl.$render = function () {
                 element.toggleClass(buttonsCtrl.activeClass, angular.equals(ngModelCtrl.$modelValue, scope.$eval(attrs.btnRadio)));
             };
 
             //ui->model
-            element.bind(buttonsCtrl.toggleEvent, function() {
+            element.bind(buttonsCtrl.toggleEvent, function () {
                 if (!element.hasClass(buttonsCtrl.activeClass)) {
-                    scope.$apply(function() {
+                    scope.$apply(function () {
                         ngModelCtrl.$setViewValue(scope.$eval(attrs.btnRadio));
                         ngModelCtrl.$render();
                     });
@@ -237,14 +241,13 @@ angular.module('mm.foundation.buttons', [])
             });
         }
     };
-})
-
-.directive('btnCheckbox', function() {
+}).directive('btnCheckbox', function () {
     'ngInject';
+
     return {
         require: ['btnCheckbox', 'ngModel'],
         controller: 'ButtonsController',
-        link: function(scope, element, attrs, ctrls) {
+        link: function link(scope, element, attrs, ctrls) {
             var buttonsCtrl = ctrls[0],
                 ngModelCtrl = ctrls[1];
 
@@ -262,13 +265,13 @@ angular.module('mm.foundation.buttons', [])
             }
 
             //model -> UI
-            ngModelCtrl.$render = function() {
+            ngModelCtrl.$render = function () {
                 element.toggleClass(buttonsCtrl.activeClass, angular.equals(ngModelCtrl.$modelValue, getTrueValue()));
             };
 
             //ui->model
-            element.bind(buttonsCtrl.toggleEvent, function() {
-                scope.$apply(function() {
+            element.bind(buttonsCtrl.toggleEvent, function () {
+                scope.$apply(function () {
                     ngModelCtrl.$setViewValue(element.hasClass(buttonsCtrl.activeClass) ? getFalseValue() : getTrueValue());
                     ngModelCtrl.$render();
                 });
@@ -293,151 +296,156 @@ var mod = angular.module('mm.foundation.dropdownToggle', ['mm.foundation.positio
 
 function DropdownToggleController($scope, $attrs, mediaQueries, $element, $position, $window) {
     'ngInject';
+
     var $ctrl = this;
 
     $ctrl.css = {};
 
-    $ctrl.toggle = function(){
-      $ctrl.active = !$ctrl.active;
+    $ctrl.toggle = function () {
+        $ctrl.active = !$ctrl.active;
 
-      $ctrl.css = {};
+        $ctrl.css = {};
 
-      if(!$ctrl.active){
-        return;
-      }
+        if (!$ctrl.active) {
+            return;
+        }
 
-      var dropdown = angular.element($element[0].querySelector('.dropdown-pane'));
-      var dropdownTrigger = angular.element($element[0].querySelector('toggle'));
+        var dropdown = angular.element($element[0].querySelector('.dropdown-pane'));
+        var dropdownTrigger = angular.element($element[0].querySelector('toggle'));
 
-      var dropdownWidth = dropdown.prop('offsetWidth');
-      var triggerPosition = $position.position(dropdownTrigger);
+        var dropdownWidth = dropdown.prop('offsetWidth');
+        var triggerPosition = $position.position(dropdownTrigger);
 
-      $ctrl.css.top = triggerPosition.top + triggerPosition.height + 5 + 'px';
-      $ctrl.css.left = triggerPosition.left + 'px';
+        $ctrl.css.top = triggerPosition.top + triggerPosition.height + 5 + 'px';
+        $ctrl.css.left = triggerPosition.left + 'px';
 
-      if (mediaQueries.small() && !mediaQueries.medium()) {
-
-      }
+        if (mediaQueries.small() && !mediaQueries.medium()) {}
     };
 }
 
-mod.directive('dropdownToggle', ['$document', '$window', '$location', '$position', function($document, $window, $location, $position) {
+mod.directive('dropdownToggle', ['$document', '$window', '$location', '$position', function ($document, $window, $location, $position) {
     'ngInject';
+
     var openElement = null;
     var closeMenu = angular.noop;
     return {
         scope: {},
         restrict: 'EA',
         transclude: {
-          'toggle': 'toggle',
-          'pane': 'pane'
+            'toggle': 'toggle',
+            'pane': 'pane'
         },
         templateUrl: 'template/dropdownToggle/dropdownToggle.html',
         controller: DropdownToggleController,
         controllerAs: '$ctrl'
-      };
+    };
 }]);
 
-(function(){angular.module("mm.foundation.dropdownToggle").run(["$templateCache", function($templateCache) {$templateCache.put("template/dropdownToggle/dropdownToggle.html","<span ng-click=\"$ctrl.toggle()\" ng-transclude=\"toggle\">Toggle Dropdown</span>\n<div\n    ng-transclude=\"pane\"\n    ng-style=\"$ctrl.css\"\n    ng-class=\"{\'is-open\': $ctrl.active}\"\n    ng-attr-aria-hidden=\"$ctrl.active\"\n    class=\"dropdown-pane\">\n  Just some junk that needs to be said. Or not. Your choice.\n</div>\n");}]);})();
-angular.module("mm.foundation.mediaQueries", [])
-    .factory('matchMedia', ['$document', '$window', function($document, $window) {
-        'ngInject';
-        // MatchMedia for IE <= 9
-        return $window.matchMedia || (function matchMedia(doc, undefined) {
-            var bool,
-                docElem = doc.documentElement,
-                refNode = docElem.firstElementChild || docElem.firstChild,
-                // fakeBody required for <FF4 when executed in <head>
-                fakeBody = doc.createElement("body"),
-                div = doc.createElement("div");
-
-            div.id = "mq-test-1";
-            div.style.cssText = "position:absolute;top:-100em";
-            fakeBody.style.background = "none";
-            fakeBody.appendChild(div);
-
-            return function(q) {
-                div.innerHTML = "&shy;<style media=\"" + q + "\"> #mq-test-1 { width: 42px; }</style>";
-                docElem.insertBefore(fakeBody, refNode);
-                bool = div.offsetWidth === 42;
-                docElem.removeChild(fakeBody);
-                return {
-                    matches: bool,
-                    media: q
-                };
-            };
-
-        }($document[0]));
-    }])
-    .factory('mediaQueries', ['$document', 'matchMedia', function($document, matchMedia) {
-        'ngInject';
-        var head = angular.element($document[0].querySelector('head'));
-        head.append('<meta class="foundation-mq-topbar" />');
-        head.append('<meta class="foundation-mq-small" />');
-        head.append('<meta class="foundation-mq-medium" />');
-        head.append('<meta class="foundation-mq-large" />');
-
-        var regex = /^[\/\\'"]+|(;\s?})+|[\/\\'"]+$/g;
-        var queries = {
-            topbar: getComputedStyle(head[0].querySelector('meta.foundation-mq-topbar')).fontFamily.replace(regex, ''),
-            small: getComputedStyle(head[0].querySelector('meta.foundation-mq-small')).fontFamily.replace(regex, ''),
-            medium: getComputedStyle(head[0].querySelector('meta.foundation-mq-medium')).fontFamily.replace(regex, ''),
-            large: getComputedStyle(head[0].querySelector('meta.foundation-mq-large')).fontFamily.replace(regex, '')
-        };
-
-        return {
-            topbarBreakpoint: function() {
-                return !matchMedia(queries.topbar).matches;
-            },
-            small: function() {
-                return matchMedia(queries.small).matches;
-            },
-            medium: function() {
-                return matchMedia(queries.medium).matches;
-            },
-            large: function() {
-                return matchMedia(queries.large).matches;
-            }
-        };
+(function () {
+    angular.module("mm.foundation.dropdownToggle").run(["$templateCache", function ($templateCache) {
+        $templateCache.put("template/dropdownToggle/dropdownToggle.html", "<span ng-click=\"$ctrl.toggle()\" ng-transclude=\"toggle\">Toggle Dropdown</span>\n<div\n    ng-transclude=\"pane\"\n    ng-style=\"$ctrl.css\"\n    ng-class=\"{\'is-open\': $ctrl.active}\"\n    ng-attr-aria-hidden=\"$ctrl.active\"\n    class=\"dropdown-pane\">\n  Just some junk that needs to be said. Or not. Your choice.\n</div>\n");
     }]);
+})();
+angular.module("mm.foundation.mediaQueries", []).factory('matchMedia', ['$document', '$window', function ($document, $window) {
+    'ngInject';
+    // MatchMedia for IE <= 9
 
-angular.module('mm.foundation.modal', ['mm.foundation.transition'])
+    return $window.matchMedia || function matchMedia(doc, undefined) {
+        var bool,
+            docElem = doc.documentElement,
+            refNode = docElem.firstElementChild || docElem.firstChild,
+
+        // fakeBody required for <FF4 when executed in <head>
+        fakeBody = doc.createElement("body"),
+            div = doc.createElement("div");
+
+        div.id = "mq-test-1";
+        div.style.cssText = "position:absolute;top:-100em";
+        fakeBody.style.background = "none";
+        fakeBody.appendChild(div);
+
+        return function (q) {
+            div.innerHTML = "&shy;<style media=\"" + q + "\"> #mq-test-1 { width: 42px; }</style>";
+            docElem.insertBefore(fakeBody, refNode);
+            bool = div.offsetWidth === 42;
+            docElem.removeChild(fakeBody);
+            return {
+                matches: bool,
+                media: q
+            };
+        };
+    }($document[0]);
+}]).factory('mediaQueries', ['$document', 'matchMedia', function ($document, matchMedia) {
+    'ngInject';
+
+    var head = angular.element($document[0].querySelector('head'));
+    head.append('<meta class="foundation-mq-topbar" />');
+    head.append('<meta class="foundation-mq-small" />');
+    head.append('<meta class="foundation-mq-medium" />');
+    head.append('<meta class="foundation-mq-large" />');
+
+    var regex = /^[\/\\'"]+|(;\s?})+|[\/\\'"]+$/g;
+    var queries = {
+        topbar: getComputedStyle(head[0].querySelector('meta.foundation-mq-topbar')).fontFamily.replace(regex, ''),
+        small: getComputedStyle(head[0].querySelector('meta.foundation-mq-small')).fontFamily.replace(regex, ''),
+        medium: getComputedStyle(head[0].querySelector('meta.foundation-mq-medium')).fontFamily.replace(regex, ''),
+        large: getComputedStyle(head[0].querySelector('meta.foundation-mq-large')).fontFamily.replace(regex, '')
+    };
+
+    return {
+        topbarBreakpoint: function topbarBreakpoint() {
+            return !matchMedia(queries.topbar).matches;
+        },
+        small: function small() {
+            return matchMedia(queries.small).matches;
+        },
+        medium: function medium() {
+            return matchMedia(queries.medium).matches;
+        },
+        large: function large() {
+            return matchMedia(queries.large).matches;
+        }
+    };
+}]);
+
+angular.module('mm.foundation.modal', [])
 
 /**
  * A helper, internal data structure that acts as a map but also allows getting / removing
  * elements in the LIFO order
  */
-.factory('$$stackedMap', function() {
+.factory('$$stackedMap', function () {
     'ngInject';
+
     return {
-        createNew: function() {
+        createNew: function createNew() {
             var stack = [];
 
             return {
-                add: function(key, value) {
+                add: function add(key, value) {
                     stack.push({
                         key: key,
                         value: value
                     });
                 },
-                get: function(key) {
+                get: function get(key) {
                     for (var i = 0; i < stack.length; i++) {
                         if (key == stack[i].key) {
                             return stack[i];
                         }
                     }
                 },
-                keys: function() {
+                keys: function keys() {
                     var keys = [];
                     for (var i = 0; i < stack.length; i++) {
                         keys.push(stack[i].key);
                     }
                     return keys;
                 },
-                top: function() {
+                top: function top() {
                     return stack[stack.length - 1];
                 },
-                remove: function(key) {
+                remove: function remove(key) {
                     var idx = -1;
                     for (var i = 0; i < stack.length; i++) {
                         if (key == stack[i].key) {
@@ -447,10 +455,10 @@ angular.module('mm.foundation.modal', ['mm.foundation.transition'])
                     }
                     return stack.splice(idx, 1)[0];
                 },
-                removeTop: function() {
+                removeTop: function removeTop() {
                     return stack.splice(stack.length - 1, 1)[0];
                 },
-                length: function() {
+                length: function length() {
                     return stack.length;
                 }
             };
@@ -461,24 +469,18 @@ angular.module('mm.foundation.modal', ['mm.foundation.transition'])
 /**
  * A helper directive for the $modal service. It creates a backdrop element.
  */
-.directive('modalBackdrop', ['$modalStack', '$timeout', function($modalStack, $timeout) {
+.directive('modalBackdrop', ['$modalStack', '$timeout', function ($modalStack, $timeout) {
     'ngInject';
+
     return {
         restrict: 'EA',
         replace: true,
         templateUrl: 'template/modal/backdrop.html',
-        link: function(scope) {
+        link: function link(scope) {
 
-            scope.animate = false;
-
-            //trigger CSS transitions
-            $timeout(function() {
-                scope.animate = true;
-            });
-
-            scope.close = function(evt) {
+            scope.close = function (evt) {
                 var modal = $modalStack.getTop();
-                if (modal && modal.value.backdrop && modal.value.backdrop != 'static' && (evt.target === evt.currentTarget)) {
+                if (modal && modal.value.backdrop && modal.value.backdrop !== 'static' && evt.target === evt.currentTarget) {
                     evt.preventDefault();
                     evt.stopPropagation();
                     $modalStack.dismiss(modal.key, 'backdrop click');
@@ -486,26 +488,21 @@ angular.module('mm.foundation.modal', ['mm.foundation.transition'])
             };
         }
     };
-}])
-
-.directive('modalWindow', ['$modalStack', '$timeout', function($modalStack, $timeout) {
+}]).directive('modalWindow', ['$modalStack', '$timeout', function ($modalStack, $timeout) {
     'ngInject';
+
     return {
         restrict: 'EA',
         scope: {
-            index: '@',
-            animate: '='
+            index: '@'
         },
         replace: true,
         transclude: true,
         templateUrl: 'template/modal/window.html',
-        link: function(scope, element, attrs) {
+        link: function link(scope, element, attrs) {
             scope.windowClass = attrs.windowClass || '';
 
-            $timeout(function() {
-                // trigger CSS transitions
-                scope.animate = true;
-
+            $timeout(function () {
                 // If the modal contains any autofocus elements refocus onto the first one
                 if (element[0].querySelectorAll('[autofocus]').length > 0) {
                     element[0].querySelectorAll('[autofocus]')[0].focus();
@@ -516,17 +513,12 @@ angular.module('mm.foundation.modal', ['mm.foundation.transition'])
             });
         }
     };
-}])
-
-.factory('$modalStack', ['$window', '$transition', '$timeout', '$document', '$compile', '$rootScope', '$$stackedMap', function($window, $transition, $timeout, $document, $compile, $rootScope, $$stackedMap) {
+}]).factory('$modalStack', ['$window', '$timeout', '$document', '$compile', '$rootScope', '$$stackedMap', '$animate', function ($window, $timeout, $document, $compile, $rootScope, $$stackedMap, $animate) {
 
     var body = $document.find('body').eq(0);
-
     var OPENED_MODAL_CLASS = 'is-reveal-open';
-
     var backdropDomEl;
     var backdropScope;
-    var cssTop;
     var openedWindows = $$stackedMap.createNew();
     var $modalStack = {};
 
@@ -541,19 +533,18 @@ angular.module('mm.foundation.modal', ['mm.foundation.transition'])
         return topBackdropIndex;
     }
 
-    $rootScope.$watch(backdropIndex, function(newBackdropIndex) {
+    $rootScope.$watch(backdropIndex, function (newBackdropIndex) {
         if (backdropScope) {
             backdropScope.index = newBackdropIndex;
         }
     });
 
-    function resizeHandler(){
-      var opened = openedWindows.keys();
-      for (var i = 0; i < opened.length; i++) {
-          $modalStack.reposition(opened[i]);
-      }
+    function resizeHandler() {
+        var opened = openedWindows.keys();
+        for (var i = 0; i < opened.length; i++) {
+            $modalStack.reposition(opened[i]);
+        }
     }
-
 
     function removeModalWindow(modalInstance) {
         var body = $document.find('body').eq(0);
@@ -563,21 +554,20 @@ angular.module('mm.foundation.modal', ['mm.foundation.transition'])
         openedWindows.remove(modalInstance);
 
         //remove window DOM element
-        removeAfterAnimate(modalWindow.modalDomEl, modalWindow.modalScope, 300, function() {
-            modalWindow.modalScope.$destroy();
-            checkRemoveBackdrop();
-            if(openedWindows.length() === 0){
-              body.removeClass(OPENED_MODAL_CLASS);
-              angular.element($window).unbind('resize', resizeHandler);
-            }
-        });
+        $animate.leave(modalWindow.modalDomEl);
+        checkRemoveBackdrop();
+        if (openedWindows.length() === 0) {
+            body.removeClass(OPENED_MODAL_CLASS);
+            angular.element($window).unbind('resize', resizeHandler);
+        }
     }
 
     function checkRemoveBackdrop() {
         //remove backdrop if no longer needed
-        if (backdropDomEl && backdropIndex() == -1) {
+        if (backdropDomEl && backdropIndex() === -1) {
             var backdropScopeRef = backdropScope;
-            removeAfterAnimate(backdropDomEl, backdropScope, 150, function() {
+
+            $animate.leave(backdropDomEl).then(function () {
                 backdropScopeRef.$destroy();
                 backdropScopeRef = null;
             });
@@ -586,86 +576,51 @@ angular.module('mm.foundation.modal', ['mm.foundation.transition'])
         }
     }
 
-    function removeAfterAnimate(domEl, scope, emulateTime, done) {
-        // Closing animation
-        scope.animate = false;
+    function getModalCenter(modalInstance) {
 
-        var transitionEndEventName = $transition.transitionEndEventName;
-        if (transitionEndEventName) {
-            // transition out
-            var timeout = $timeout(afterAnimating, emulateTime);
+        var options = modalInstance.options;
+        var el = options.modalDomEl;
 
-            domEl.bind(transitionEndEventName, function() {
-                $timeout.cancel(timeout);
-                afterAnimating();
-                scope.$apply();
-            });
+        var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
+        var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+
+        var width = el[0].offsetWidth;
+        var height = el[0].offsetHeight;
+
+        var left = parseInt((windowWidth - width) / 2, 10);
+        var top;
+        if (height > windowHeight) {
+            top = parseInt(Math.min(100, windowHeight / 10), 10);
         } else {
-            // Ensure this call is async
-            $timeout(afterAnimating, 0);
+            top = parseInt((windowHeight - height) / 4, 10);
         }
 
-        function afterAnimating() {
-            if (afterAnimating.done) {
-                return;
-            }
-            afterAnimating.done = true;
-
-            domEl.remove();
-            if (done) {
-                done();
-            }
-        }
+        return {
+            top: top,
+            left: left
+        };
     }
 
-
-    function getModalCenter(modalInstance){
-
-      var options = modalInstance.options;
-      var el = options.modalDomEl;
-
-      var windowWidth = window.innerWidth
-      || document.documentElement.clientWidth
-      || document.body.clientWidth;
-
-      var windowHeight = window.innerHeight
-      || document.documentElement.clientHeight
-      || document.body.clientHeight;
-
-      var width = el[0].offsetWidth;
-      var height = el[0].offsetHeight;
-
-      var left = parseInt((windowWidth - width) / 2, 10);
-      var top;
-      if (height > windowHeight) {
-        top = parseInt(Math.min(100, windowHeight / 10), 10);
-      } else {
-        top = parseInt((windowHeight - height) / 4, 10);
-      }
-
-      return {top: top, left: left};
-    }
-
-
-    $document.bind('keydown', function(evt) {
+    $document.bind('keydown', function (evt) {
         var modal;
 
         if (evt.which === 27) {
             modal = openedWindows.top();
             if (modal && modal.value.keyboard) {
-                $rootScope.$apply(function() {
+                $rootScope.$apply(function () {
                     $modalStack.dismiss(modal.key);
                 });
             }
         }
     });
 
-    $modalStack.open = function(modalInstance, options) {
+    $modalStack.open = function (modalInstance, options) {
         modalInstance.options = {
             deferred: options.deferred,
             modalScope: options.scope,
             backdrop: options.backdrop,
-            keyboard: options.keyboard,
+            keyboard: options.keyboard
         };
         openedWindows.add(modalInstance, modalInstance.options);
 
@@ -677,60 +632,51 @@ angular.module('mm.foundation.modal', ['mm.foundation.transition'])
             backdropDomEl = $compile('<div modal-backdrop></div>')(backdropScope);
         }
 
-        if(openedWindows.length() === 1){
-          angular.element($window).bind('resize', resizeHandler);
+        if (openedWindows.length() === 1) {
+            angular.element($window).bind('resize', resizeHandler);
         }
-
-        var savedAnimate = options.scope.animate;
-        options.scope.animate = false;
 
         var modalDomEl = angular.element('<div modal-window></div>').attr({
             'style': 'visibility: visible; z-index: -1; display: block;',
             'window-class': options.windowClass,
-            'index': openedWindows.length() - 1,
-            'animate': 'animate'
+            'index': openedWindows.length() - 1
         });
         modalDomEl.html(options.content);
         modalDomEl = $compile(modalDomEl)(options.scope);
 
-        $timeout(function(){
-          // let the directives kick in
-          options.scope.$apply();
+        return $timeout(function () {
+            // let the directives kick in
+            options.scope.$apply();
 
-          openedWindows.top().value.modalDomEl = modalDomEl;
+            openedWindows.top().value.modalDomEl = modalDomEl;
 
-          // Attach, measure, remove
-          body.prepend(modalDomEl);
-          modalPos = getModalCenter(modalInstance, true);
-          modalDomEl.detach();
+            // Attach, measure, remove
+            body.prepend(modalDomEl);
+            var modalPos = getModalCenter(modalInstance, true);
+            modalDomEl.detach();
 
-          // set animations to what it was
-          options.scope.animate = savedAnimate;
+            modalDomEl.attr({
+                'style': 'visibility: visible; top: ' + modalPos.top + 'px; left: ' + modalPos.left + 'px; display: block;'
+            });
 
-          modalDomEl.attr({
-              'style': 'visibility: visible; top:' + modalPos.top + 'px; left: ' + modalPos.left +'px; display: block;',
-          });
-
-          options.scope.$apply();
-
-          body.prepend(backdropDomEl);
-          body.prepend(modalDomEl);
-          body.addClass(OPENED_MODAL_CLASS);
-        })
-
+            $animate.enter(backdropDomEl, body);
+            $animate.enter(modalDomEl, body);
+            body.addClass(OPENED_MODAL_CLASS);
+            options.scope.$apply();
+        });
     };
 
-    $modalStack.reposition = function(modalInstance) {
+    $modalStack.reposition = function (modalInstance) {
         var modalWindow = openedWindows.get(modalInstance).value;
         if (modalWindow) {
             var modalDomEl = modalWindow.modalDomEl;
             var modalPos = getModalCenter(modalInstance);
-            modalDomEl.css('top', modalPos.top + "px");
-            modalDomEl.css('left', modalPos.left + "px");
+            modalDomEl.css('top', modalPos.top + 'px');
+            modalDomEl.css('left', modalPos.left + 'px');
         }
     };
 
-    $modalStack.close = function(modalInstance, result) {
+    $modalStack.close = function (modalInstance, result) {
         var modalWindow = openedWindows.get(modalInstance);
         if (modalWindow) {
             modalWindow.value.deferred.resolve(result);
@@ -738,7 +684,7 @@ angular.module('mm.foundation.modal', ['mm.foundation.transition'])
         }
     };
 
-    $modalStack.dismiss = function(modalInstance, reason) {
+    $modalStack.dismiss = function (modalInstance, reason) {
         var modalWindow = openedWindows.get(modalInstance);
         if (modalWindow) {
             modalWindow.value.deferred.reject(reason);
@@ -746,7 +692,7 @@ angular.module('mm.foundation.modal', ['mm.foundation.transition'])
         }
     };
 
-    $modalStack.dismissAll = function(reason) {
+    $modalStack.dismissAll = function (reason) {
         var topModal = this.getTop();
         while (topModal) {
             this.dismiss(topModal.key, reason);
@@ -754,37 +700,35 @@ angular.module('mm.foundation.modal', ['mm.foundation.transition'])
         }
     };
 
-    $modalStack.getTop = function() {
+    $modalStack.getTop = function () {
         return openedWindows.top();
     };
 
     return $modalStack;
-}])
-
-.provider('$modal', function() {
+}]).provider('$modal', function () {
     'ngInject';
+
     var $modalProvider = {
         options: {
             backdrop: true, //can be also false or 'static'
             keyboard: true
         },
-        $get: ['$injector', '$rootScope', '$q', '$http', '$templateCache', '$controller', '$modalStack', function($injector, $rootScope, $q, $http, $templateCache, $controller, $modalStack) {
+        $get: ['$injector', '$rootScope', '$q', '$http', '$templateCache', '$controller', '$modalStack', function $get($injector, $rootScope, $q, $http, $templateCache, $controller, $modalStack) {
             'ngInject';
 
             var $modal = {};
 
             function getTemplatePromise(options) {
-                return options.template ? $q.when(options.template) :
-                    $http.get(options.templateUrl, {
-                        cache: $templateCache
-                    }).then(function(result) {
-                        return result.data;
-                    });
+                return options.template ? $q.when(options.template) : $http.get(options.templateUrl, {
+                    cache: $templateCache
+                }).then(function (result) {
+                    return result.data;
+                });
             }
 
             function getResolvePromises(resolves) {
                 var promisesArr = [];
-                angular.forEach(resolves, function(value, key) {
+                angular.forEach(resolves, function (value, key) {
                     if (angular.isFunction(value) || angular.isArray(value)) {
                         promisesArr.push($q.when($injector.invoke(value)));
                     }
@@ -792,7 +736,7 @@ angular.module('mm.foundation.modal', ['mm.foundation.transition'])
                 return promisesArr;
             }
 
-            $modal.open = function(modalOptions) {
+            $modal.open = function (modalOptions) {
 
                 var modalResultDeferred = $q.defer();
                 var modalOpenedDeferred = $q.defer();
@@ -801,13 +745,13 @@ angular.module('mm.foundation.modal', ['mm.foundation.transition'])
                 var modalInstance = {
                     result: modalResultDeferred.promise,
                     opened: modalOpenedDeferred.promise,
-                    close: function(result) {
+                    close: function close(result) {
                         $modalStack.close(modalInstance, result);
                     },
-                    dismiss: function(reason) {
+                    dismiss: function dismiss(reason) {
                         $modalStack.dismiss(modalInstance, reason);
                     },
-                    reposition: function() {
+                    reposition: function reposition() {
                         $modalStack.reposition(modalInstance);
                     }
                 };
@@ -821,9 +765,7 @@ angular.module('mm.foundation.modal', ['mm.foundation.transition'])
                     throw new Error('One of template or templateUrl options is required.');
                 }
 
-                var templateAndResolvePromise =
-                    $q.all([getTemplatePromise(modalOptions)].concat(getResolvePromises(modalOptions.resolve)));
-
+                var templateAndResolvePromise = $q.all([getTemplatePromise(modalOptions)].concat(getResolvePromises(modalOptions.resolve)));
 
                 templateAndResolvePromise.then(function resolveSuccess(tplAndVars) {
 
@@ -831,14 +773,15 @@ angular.module('mm.foundation.modal', ['mm.foundation.transition'])
                     modalScope.$close = modalInstance.close;
                     modalScope.$dismiss = modalInstance.dismiss;
 
-                    var ctrlInstance, ctrlLocals = {};
+                    var ctrlInstance;
+                    var ctrlLocals = {};
                     var resolveIter = 1;
 
                     //controllers
                     if (modalOptions.controller) {
                         ctrlLocals.$scope = modalScope;
                         ctrlLocals.$modalInstance = modalInstance;
-                        angular.forEach(modalOptions.resolve, function(value, key) {
+                        angular.forEach(modalOptions.resolve, function (value, key) {
                             ctrlLocals[key] = tplAndVars[resolveIter++];
                         });
 
@@ -848,7 +791,7 @@ angular.module('mm.foundation.modal', ['mm.foundation.transition'])
                         }
                     }
 
-                    $modalStack.open(modalInstance, {
+                    return $modalStack.open(modalInstance, {
                         scope: modalScope,
                         deferred: modalResultDeferred,
                         content: tplAndVars[0],
@@ -856,14 +799,13 @@ angular.module('mm.foundation.modal', ['mm.foundation.transition'])
                         keyboard: modalOptions.keyboard,
                         windowClass: modalOptions.windowClass
                     });
-
                 }, function resolveError(reason) {
                     modalResultDeferred.reject(reason);
                 });
 
-                templateAndResolvePromise.then(function() {
+                templateAndResolvePromise.then(function () {
                     modalOpenedDeferred.resolve(true);
-                }, function() {
+                }, function () {
                     modalOpenedDeferred.reject(false);
                 });
 
@@ -877,17 +819,19 @@ angular.module('mm.foundation.modal', ['mm.foundation.transition'])
     return $modalProvider;
 });
 
-(function(){angular.module("mm.foundation.modal").run(["$templateCache", function($templateCache) {$templateCache.put("template/modal/backdrop.html","<div class=\"reveal-overlay fade\" ng-class=\"{in: animate}\" ng-click=\"close($event)\" style=\"display: block\"></div>\n");
-$templateCache.put("template/modal/window.html","<div tabindex=\"-1\" class=\"reveal without-overlay fade {{ windowClass }}\"\n  ng-class=\"{in: animate}\" style=\"display: block; visibility: visible\">\n  <div ng-transclude></div>\n</div>\n");}]);})();
-angular.module('mm.foundation.pagination', [])
-
-.controller('PaginationController', ['$scope', '$attrs', '$parse', '$interpolate', function($scope, $attrs, $parse, $interpolate) {
+(function () {
+    angular.module("mm.foundation.modal").run(["$templateCache", function ($templateCache) {
+        $templateCache.put("template/modal/backdrop.html", "<div class=\"reveal-overlay ng-animate\" ng-click=\"close($event)\" style=\"display: block\"></div>\n");
+        $templateCache.put("template/modal/window.html", "<div tabindex=\"-1\" class=\"reveal without-overlay ng-animate {{ windowClass }}\" style=\"display: block; visibility: visible\">\n  <div ng-transclude></div>\n</div>\n");
+    }]);
+})();
+angular.module('mm.foundation.pagination', []).controller('PaginationController', ['$scope', '$attrs', '$parse', '$interpolate', function ($scope, $attrs, $parse, $interpolate) {
     var self = this,
         setNumPages = $attrs.numPages ? $parse($attrs.numPages).assign : angular.noop;
 
-    this.init = function(defaultItemsPerPage) {
+    this.init = function (defaultItemsPerPage) {
         if ($attrs.itemsPerPage) {
-            $scope.$parent.$watch($parse($attrs.itemsPerPage), function(value) {
+            $scope.$parent.$watch($parse($attrs.itemsPerPage), function (value) {
                 self.itemsPerPage = parseInt(value, 10);
                 $scope.totalPages = self.calculateTotalPages();
             });
@@ -896,34 +840,34 @@ angular.module('mm.foundation.pagination', [])
         }
     };
 
-    this.noPrevious = function() {
+    this.noPrevious = function () {
         return this.page === 1;
     };
-    this.noNext = function() {
+    this.noNext = function () {
         return this.page === $scope.totalPages;
     };
 
-    this.isActive = function(page) {
+    this.isActive = function (page) {
         return this.page === page;
     };
 
-    this.calculateTotalPages = function() {
+    this.calculateTotalPages = function () {
         var totalPages = this.itemsPerPage < 1 ? 1 : Math.ceil($scope.totalItems / this.itemsPerPage);
         return Math.max(totalPages || 0, 1);
     };
 
-    this.getAttributeValue = function(attribute, defaultValue, interpolate) {
-        return angular.isDefined(attribute) ? (interpolate ? $interpolate(attribute)($scope.$parent) : $scope.$parent.$eval(attribute)) : defaultValue;
+    this.getAttributeValue = function (attribute, defaultValue, interpolate) {
+        return angular.isDefined(attribute) ? interpolate ? $interpolate(attribute)($scope.$parent) : $scope.$parent.$eval(attribute) : defaultValue;
     };
 
-    this.render = function() {
+    this.render = function () {
         this.page = parseInt($scope.page, 10) || 1;
         if (this.page > 0 && this.page <= $scope.totalPages) {
             $scope.pages = this.getPages(this.page, $scope.totalPages);
         }
     };
 
-    $scope.selectPage = function(page) {
+    $scope.selectPage = function (page) {
         if (!self.isActive(page) && page > 0 && page <= $scope.totalPages) {
             $scope.page = page;
             $scope.onSelectPage({
@@ -932,15 +876,15 @@ angular.module('mm.foundation.pagination', [])
         }
     };
 
-    $scope.$watch('page', function() {
+    $scope.$watch('page', function () {
         self.render();
     });
 
-    $scope.$watch('totalItems', function() {
+    $scope.$watch('totalItems', function () {
         $scope.totalPages = self.calculateTotalPages();
     });
 
-    $scope.$watch('totalPages', function(value) {
+    $scope.$watch('totalPages', function (value) {
         setNumPages($scope.$parent, value); // Readonly variable
 
         if (self.page > value) {
@@ -949,9 +893,7 @@ angular.module('mm.foundation.pagination', [])
             self.render();
         }
     });
-}])
-
-.constant('paginationConfig', {
+}]).constant('paginationConfig', {
     itemsPerPage: 10,
     boundaryLinks: false,
     directionLinks: true,
@@ -960,10 +902,9 @@ angular.module('mm.foundation.pagination', [])
     nextText: 'Next',
     lastText: 'Last',
     rotate: true
-})
-
-.directive('pagination', ['$parse', 'paginationConfig', function($parse, paginationConfig) {
+}).directive('pagination', ['$parse', 'paginationConfig', function ($parse, paginationConfig) {
     'ngInject';
+
     return {
         restrict: 'EA',
         scope: {
@@ -974,7 +915,7 @@ angular.module('mm.foundation.pagination', [])
         controller: 'PaginationController',
         templateUrl: 'template/pagination/pagination.html',
         replace: true,
-        link: function(scope, element, attrs, paginationCtrl) {
+        link: function link(scope, element, attrs, paginationCtrl) {
 
             // Setup configuration parameters
             var maxSize,
@@ -989,7 +930,7 @@ angular.module('mm.foundation.pagination', [])
             paginationCtrl.init(paginationConfig.itemsPerPage);
 
             if (attrs.maxSize) {
-                scope.$parent.$watch($parse(attrs.maxSize), function(value) {
+                scope.$parent.$watch($parse(attrs.maxSize), function (value) {
                     maxSize = parseInt(value, 10);
                     paginationCtrl.render();
                 });
@@ -1005,13 +946,13 @@ angular.module('mm.foundation.pagination', [])
                 };
             }
 
-            paginationCtrl.getPages = function(currentPage, totalPages) {
+            paginationCtrl.getPages = function (currentPage, totalPages) {
                 var pages = [];
 
                 // Default page limits
                 var startPage = 1,
                     endPage = totalPages;
-                var isMaxSized = (angular.isDefined(maxSize) && maxSize < totalPages);
+                var isMaxSized = angular.isDefined(maxSize) && maxSize < totalPages;
 
                 // recompute if maxSize
                 if (isMaxSized) {
@@ -1027,7 +968,7 @@ angular.module('mm.foundation.pagination', [])
                         }
                     } else {
                         // Visible pages are paginated with maxSize
-                        startPage = ((Math.ceil(currentPage / maxSize) - 1) * maxSize) + 1;
+                        startPage = (Math.ceil(currentPage / maxSize) - 1) * maxSize + 1;
 
                         // Adjust last page if limit is exceeded
                         endPage = Math.min(startPage + maxSize - 1, totalPages);
@@ -1075,17 +1016,14 @@ angular.module('mm.foundation.pagination', [])
             };
         }
     };
-}])
-
-.constant('pagerConfig', {
+}]).constant('pagerConfig', {
     itemsPerPage: 10,
     previousText: '« Previous',
     nextText: 'Next »',
     align: true
-})
-
-.directive('pager', ['pagerConfig', function(pagerConfig) {
+}).directive('pager', ['pagerConfig', function (pagerConfig) {
     'ngInject';
+
     return {
         restrict: 'EA',
         scope: {
@@ -1096,7 +1034,7 @@ angular.module('mm.foundation.pagination', [])
         controller: 'PaginationController',
         templateUrl: 'template/pagination/pager.html',
         replace: true,
-        link: function(scope, element, attrs, paginationCtrl) {
+        link: function link(scope, element, attrs, paginationCtrl) {
 
             // Setup configuration parameters
             var previousText = paginationCtrl.getAttributeValue(attrs.previousText, pagerConfig.previousText, true),
@@ -1111,23 +1049,24 @@ angular.module('mm.foundation.pagination', [])
                     number: number,
                     text: text,
                     disabled: isDisabled,
-                    previous: (align && isPrevious),
-                    next: (align && isNext)
+                    previous: align && isPrevious,
+                    next: align && isNext
                 };
             }
 
-            paginationCtrl.getPages = function(currentPage) {
-                return [
-                    makePage(currentPage - 1, previousText, paginationCtrl.noPrevious(), true, false),
-                    makePage(currentPage + 1, nextText, paginationCtrl.noNext(), false, true)
-                ];
+            paginationCtrl.getPages = function (currentPage) {
+                return [makePage(currentPage - 1, previousText, paginationCtrl.noPrevious(), true, false), makePage(currentPage + 1, nextText, paginationCtrl.noNext(), false, true)];
             };
         }
     };
 }]);
 
-(function(){angular.module("mm.foundation.pagination").run(["$templateCache", function($templateCache) {$templateCache.put("template/pagination/pager.html","<ul class=\"pagination\">\n  <li ng-repeat=\"page in pages\" class=\"arrow\" ng-class=\"{unavailable: page.disabled, left: page.previous, right: page.next}\"><a ng-click=\"selectPage(page.number)\">{{page.text}}</a></li>\n</ul>\n");
-$templateCache.put("template/pagination/pagination.html","<ul class=\"pagination\">\n  <li ng-repeat=\"page in pages\" ng-class=\"{arrow: $first || $last, current: page.active, unavailable: page.disabled}\"><a ng-click=\"selectPage(page.number)\">{{page.text}}</a></li>\n</ul>\n");}]);})();
+(function () {
+    angular.module("mm.foundation.pagination").run(["$templateCache", function ($templateCache) {
+        $templateCache.put("template/pagination/pager.html", "<ul class=\"pagination\">\n  <li ng-repeat=\"page in pages\" class=\"arrow\" ng-class=\"{unavailable: page.disabled, left: page.previous, right: page.next}\"><a ng-click=\"selectPage(page.number)\">{{page.text}}</a></li>\n</ul>\n");
+        $templateCache.put("template/pagination/pagination.html", "<ul class=\"pagination\">\n  <li ng-repeat=\"page in pages\" ng-class=\"{arrow: $first || $last, current: page.active, unavailable: page.disabled}\"><a ng-click=\"selectPage(page.number)\">{{page.text}}</a></li>\n</ul>\n");
+    }]);
+})();
 angular.module('mm.foundation.position', [])
 
 /**
@@ -1136,10 +1075,12 @@ angular.module('mm.foundation.position', [])
  * relation to other, existing elements (this is the case for tooltips, popovers,
  * typeahead suggestions etc.).
  */
-.factory('$position', ['$document', '$window', function($document, $window) {
+.factory('$position', ['$document', '$window', function ($document, $window) {
     'ngInject';
+
     function getStyle(el, cssprop) {
-        if (el.currentStyle) { //IE
+        if (el.currentStyle) {
+            //IE
             return el.currentStyle[cssprop];
         } else if ($window.getComputedStyle) {
             return $window.getComputedStyle(el)[cssprop];
@@ -1160,7 +1101,7 @@ angular.module('mm.foundation.position', [])
      * returns the closest, non-statically positioned parentOffset of a given element
      * @param element
      */
-    var parentOffsetEl = function(element) {
+    var parentOffsetEl = function parentOffsetEl(element) {
         var docDomEl = $document[0];
         var offsetParent = element.offsetParent || docDomEl;
         while (offsetParent && offsetParent !== docDomEl && isStaticPositioned(offsetParent)) {
@@ -1174,7 +1115,7 @@ angular.module('mm.foundation.position', [])
          * Provides read-only equivalent of jQuery's position function:
          * http://api.jquery.com/position/
          */
-        position: function(element) {
+        position: function position(element) {
             var elBCR = this.offset(element);
             var offsetParentBCR = {
                 top: 0,
@@ -1200,7 +1141,7 @@ angular.module('mm.foundation.position', [])
          * Provides read-only equivalent of jQuery's offset function:
          * http://api.jquery.com/offset/
          */
-        offset: function(element) {
+        offset: function offset(element) {
             var boundingClientRect = element[0].getBoundingClientRect();
             return {
                 width: boundingClientRect.width || element.prop('offsetWidth'),
@@ -1220,10 +1161,9 @@ angular.module('mm.foundation.position', [])
  * AngularJS version of the tabs directive.
  */
 
-angular.module('mm.foundation.tabs', [])
-
-.controller('TabsetController', ['$scope', function TabsetCtrl($scope) {
+angular.module('mm.foundation.tabs', []).controller('TabsetController', ['$scope', function TabsetCtrl($scope) {
     'ngInject';
+
     var ctrl = this;
     var tabs = ctrl.tabs = $scope.tabs = [];
 
@@ -1231,8 +1171,8 @@ angular.module('mm.foundation.tabs', [])
         $scope.openOnLoad = true;
     }
 
-    ctrl.select = function(tab) {
-        angular.forEach(tabs, function(tab) {
+    ctrl.select = function (tab) {
+        angular.forEach(tabs, function (tab) {
             tab.active = false;
         });
         tab.active = true;
@@ -1287,8 +1227,9 @@ angular.module('mm.foundation.tabs', [])
   </file>
 </example>
  */
-.directive('tabset', function() {
+.directive('tabset', function () {
     'ngInject';
+
     return {
         restrict: 'EA',
         transclude: true,
@@ -1298,7 +1239,7 @@ angular.module('mm.foundation.tabs', [])
         },
         controller: 'TabsetController',
         templateUrl: 'template/tabs/tabset.html',
-        link: function(scope, element, attrs) {
+        link: function link(scope, element, attrs) {
             scope.vertical = angular.isDefined(attrs.vertical) ? scope.$parent.$eval(attrs.vertical) : false;
             scope.justified = angular.isDefined(attrs.justified) ? scope.$parent.$eval(attrs.justified) : false;
             scope.type = angular.isDefined(attrs.type) ? scope.$parent.$eval(attrs.type) : 'tabs';
@@ -1386,8 +1327,9 @@ angular.module('mm.foundation.tabs', [])
   </file>
 </example>
  */
-.directive('tab', ['$parse', function($parse) {
+.directive('tab', ['$parse', function ($parse) {
     'ngInject';
+
     return {
         require: '^tabset',
         restrict: 'EA',
@@ -1400,10 +1342,10 @@ angular.module('mm.foundation.tabs', [])
             //once it inserts the tab's content into the dom
             onDeselect: '&deselect'
         },
-        controller: function() {
+        controller: function controller() {
             //Empty controller so other directives can require being 'under' a tab
         },
-        compile: function(elm, attrs, transclude) {
+        compile: function compile(elm, attrs, transclude) {
             return function postLink(scope, elm, attrs, tabsetCtrl) {
                 var getActive, setActive;
                 if (attrs.active) {
@@ -1422,7 +1364,7 @@ angular.module('mm.foundation.tabs', [])
                     setActive = getActive = angular.noop;
                 }
 
-                scope.$watch('active', function(active) {
+                scope.$watch('active', function (active) {
                     if (!angular.isFunction(setActive)) {
                         return;
                     }
@@ -1439,22 +1381,21 @@ angular.module('mm.foundation.tabs', [])
 
                 scope.disabled = false;
                 if (attrs.disabled) {
-                    scope.$parent.$watch($parse(attrs.disabled), function(value) {
+                    scope.$parent.$watch($parse(attrs.disabled), function (value) {
                         scope.disabled = !!value;
                     });
                 }
 
-                scope.select = function() {
+                scope.select = function () {
                     if (!scope.disabled) {
                         scope.active = true;
                     }
                 };
 
                 tabsetCtrl.addTab(scope);
-                scope.$on('$destroy', function() {
+                scope.$on('$destroy', function () {
                     tabsetCtrl.removeTab(scope);
                 });
-
 
                 //We need to transclude later, once the content container is ready.
                 //when this link happens, we're inside a tab heading.
@@ -1462,14 +1403,13 @@ angular.module('mm.foundation.tabs', [])
             };
         }
     };
-}])
-
-.directive('tabHeadingTransclude', function() {
+}]).directive('tabHeadingTransclude', function () {
     'ngInject';
+
     return {
         restrict: 'A',
         require: '^tab',
-        link: function(scope, elm, attrs, tabCtrl) {
+        link: function link(scope, elm, attrs, tabCtrl) {
             scope.$watch('headingElement', function updateHeadingElement(heading) {
                 if (heading) {
                     elm.html('');
@@ -1478,20 +1418,19 @@ angular.module('mm.foundation.tabs', [])
             });
         }
     };
-})
-
-.directive('tabContentTransclude', function() {
+}).directive('tabContentTransclude', function () {
     'ngInject';
+
     return {
         restrict: 'A',
         require: '^tabset',
-        link: function(scope, elm, attrs) {
+        link: function link(scope, elm, attrs) {
             var tab = scope.$eval(attrs.tabContentTransclude);
 
             //Now our tab is ready to be transcluded: both the tab heading area
             //and the tab content area are loaded.  Transclude 'em both.
-            tab.$transcludeFn(tab.$parent, function(contents) {
-                angular.forEach(contents, function(node) {
+            tab.$transcludeFn(tab.$parent, function (contents) {
+                angular.forEach(contents, function (node) {
                     if (isTabHeading(node)) {
                         //Let tabHeadingTransclude know.
                         tab.headingElement = node;
@@ -1504,101 +1443,14 @@ angular.module('mm.foundation.tabs', [])
     };
 
     function isTabHeading(node) {
-        return node.tagName && (
-            node.hasAttribute('tab-heading') ||
-            node.hasAttribute('data-tab-heading') ||
-            node.tagName.toLowerCase() === 'tab-heading' ||
-            node.tagName.toLowerCase() === 'data-tab-heading'
-        );
+        return node.tagName && (node.hasAttribute('tab-heading') || node.hasAttribute('data-tab-heading') || node.tagName.toLowerCase() === 'tab-heading' || node.tagName.toLowerCase() === 'data-tab-heading');
     }
-})
+});
 
-;
-
-(function(){angular.module("mm.foundation.tabs").run(["$templateCache", function($templateCache) {$templateCache.put("template/tabs/tab.html","<li class=\"tabs-title\" ng-class=\"{\'is-active\': active}\">\n  <a ng-click=\"select()\" ng-attr-aria-selected=\"{{active}}\" tab-heading-transclude>{{heading}}</a>\n</li>\n");
-$templateCache.put("template/tabs/tabset.html","<div class=\"tabbable\">\n  <ul class=\"tabs\" ng-class=\"{\'vertical\': vertical}\" ng-transclude></ul>\n  <div class=\"tabs-content\" ng-class=\"{\'vertical\': vertical}\">\n    <div class=\"tabs-panel\"\n      ng-repeat=\"tab in tabs\"\n      ng-class=\"{\'is-active\': tab.active}\">\n      <div tab-content-transclude=\"tab\"></div>\n    </div>\n  </div>\n</div>\n");}]);})();
-angular.module('mm.foundation.transition', [])
-
-/**
- * $transition service provides a consistent interface to trigger CSS 3 transitions and to be informed when they complete.
- * @param  {DOMElement} element  The DOMElement that will be animated.
- * @param  {string|object|function} trigger  The thing that will cause the transition to start:
- *   - As a string, it represents the css class to be added to the element.
- *   - As an object, it represents a hash of style attributes to be applied to the element.
- *   - As a function, it represents a function to be called that will cause the transition to occur.
- * @return {Promise}  A promise that is resolved when the transition finishes.
- */
-.factory('$transition', ['$q', '$timeout', '$rootScope', function($q, $timeout, $rootScope) {
-    'ngInject';
-    var $transition = function(element, trigger, options) {
-        options = options || {};
-        var deferred = $q.defer();
-        var endEventName = $transition[options.animation ? "animationEndEventName" : "transitionEndEventName"];
-
-        var transitionEndHandler = function(event) {
-            $rootScope.$apply(function() {
-                element.unbind(endEventName, transitionEndHandler);
-                deferred.resolve(element);
-            });
-        };
-
-        if (endEventName) {
-            element.bind(endEventName, transitionEndHandler);
-        }
-
-        // Wrap in a timeout to allow the browser time to update the DOM before the transition is to occur
-        $timeout(function() {
-            if (angular.isString(trigger)) {
-                element.addClass(trigger);
-            } else if (angular.isFunction(trigger)) {
-                trigger(element);
-            } else if (angular.isObject(trigger)) {
-                element.css(trigger);
-            }
-            //If browser does not support transitions, instantly resolve
-            if (!endEventName) {
-                deferred.resolve(element);
-            }
-        });
-
-        // Add our custom cancel function to the promise that is returned
-        // We can call this if we are about to run a new transition, which we know will prevent this transition from ending,
-        // i.e. it will therefore never raise a transitionEnd event for that transition
-        deferred.promise.cancel = function() {
-            if (endEventName) {
-                element.unbind(endEventName, transitionEndHandler);
-            }
-            deferred.reject('Transition cancelled');
-        };
-
-        return deferred.promise;
-    };
-
-    // Work out the name of the transitionEnd event
-    var transElement = document.createElement('trans');
-    var transitionEndEventNames = {
-        'WebkitTransition': 'webkitTransitionEnd',
-        'MozTransition': 'transitionend',
-        'OTransition': 'oTransitionEnd',
-        'transition': 'transitionend'
-    };
-    var animationEndEventNames = {
-        'WebkitTransition': 'webkitAnimationEnd',
-        'MozTransition': 'animationend',
-        'OTransition': 'oAnimationEnd',
-        'transition': 'animationend'
-    };
-
-    function findEndEventName(endEventNames) {
-        for (var name in endEventNames) {
-            if (transElement.style[name] !== undefined) {
-                return endEventNames[name];
-            }
-        }
-    }
-    $transition.transitionEndEventName = findEndEventName(transitionEndEventNames);
-    $transition.animationEndEventName = findEndEventName(animationEndEventNames);
-    return $transition;
-}]);
-
-angular.module("mm.foundation", ["mm.foundation.accordion","mm.foundation.alert","mm.foundation.bindHtml","mm.foundation.buttons","mm.foundation.dropdownToggle","mm.foundation.mediaQueries","mm.foundation.modal","mm.foundation.pagination","mm.foundation.position","mm.foundation.tabs","mm.foundation.transition"]);
+(function () {
+    angular.module("mm.foundation.tabs").run(["$templateCache", function ($templateCache) {
+        $templateCache.put("template/tabs/tab.html", "<li class=\"tabs-title\" ng-class=\"{\'is-active\': active}\">\n  <a ng-click=\"select()\" ng-attr-aria-selected=\"{{active}}\" tab-heading-transclude>{{heading}}</a>\n</li>\n");
+        $templateCache.put("template/tabs/tabset.html", "<div class=\"tabbable\">\n  <ul class=\"tabs\" ng-class=\"{\'vertical\': vertical}\" ng-transclude></ul>\n  <div class=\"tabs-content\" ng-class=\"{\'vertical\': vertical}\">\n    <div class=\"tabs-panel\"\n      ng-repeat=\"tab in tabs\"\n      ng-class=\"{\'is-active\': tab.active}\">\n      <div tab-content-transclude=\"tab\"></div>\n    </div>\n  </div>\n</div>\n");
+    }]);
+})();
+angular.module("mm.foundation", ["mm.foundation.accordion", "mm.foundation.alert", "mm.foundation.bindHtml", "mm.foundation.buttons", "mm.foundation.dropdownToggle", "mm.foundation.mediaQueries", "mm.foundation.modal", "mm.foundation.pagination", "mm.foundation.position", "mm.foundation.tabs"]);
