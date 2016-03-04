@@ -485,16 +485,6 @@ angular.module('mm.foundation.modal', [])
         templateUrl: 'template/modal/window.html',
         link: function link(scope, element, attrs) {
             scope.windowClass = attrs.windowClass || '';
-
-            $timeout(function () {
-                // If the modal contains any autofocus elements refocus onto the first one
-                if (element[0].querySelectorAll('[autofocus]').length > 0) {
-                    element[0].querySelectorAll('[autofocus]')[0].focus();
-                } else {
-                    // otherwise focus the freshly-opened modal
-                    element[0].focus();
-                }
-            });
         }
     };
 }]).factory('$modalStack', ['$window', '$timeout', '$document', '$compile', '$rootScope', '$$stackedMap', '$animate', '$q', function ($window, $timeout, $document, $compile, $rootScope, $$stackedMap, $animate, $q) {
@@ -525,8 +515,17 @@ angular.module('mm.foundation.modal', [])
 
     function resizeHandler() {
         var opened = openedWindows.keys();
+        var fixedPositiong = true;
         for (var i = 0; i < opened.length; i++) {
-            $modalStack.reposition(opened[i]);
+            var modalPos = $modalStack.reposition(opened[i]);
+            if (modalPos && modalPos.position !== 'fixed') {
+                fixedPositiong = false;
+            }
+        }
+        if (fixedPositiong) {
+            body.addClass(OPENED_MODAL_CLASS);
+        } else {
+            body.removeClass(OPENED_MODAL_CLASS);
         }
     }
 
@@ -541,7 +540,7 @@ angular.module('mm.foundation.modal', [])
         $animate.leave(modalWindow.modalDomEl);
         checkRemoveBackdrop();
         if (openedWindows.length() === 0) {
-            $animate.removeClass(body, OPENED_MODAL_CLASS);
+            body.removeClass(OPENED_MODAL_CLASS);
             angular.element($window).unbind('resize', resizeHandler);
         }
     }
@@ -580,9 +579,12 @@ angular.module('mm.foundation.modal', [])
             top = parseInt((windowHeight - height) / 4, 10);
         }
 
+        var fitsWindow = windowHeight > top + height;
+
         return {
-            top: top,
-            left: left
+            top: fitsWindow ? top : top + options.scrollY,
+            left: left,
+            position: fitsWindow ? 'fixed' : 'absolute'
         };
     }
 
@@ -626,13 +628,16 @@ angular.module('mm.foundation.modal', [])
             'index': openedWindows.length() - 1
         });
         modalDomEl.html(options.content);
-        modalDomEl = $compile(modalDomEl)(options.scope);
+        $compile(modalDomEl)(options.scope);
 
         return $timeout(function () {
             // let the directives kick in
             options.scope.$apply();
 
+            var scrollY = $window.pageYOffset || 0;
+
             openedWindows.top().value.modalDomEl = modalDomEl;
+            openedWindows.top().value.scrollY = scrollY;
 
             // Attach, measure, remove
             body.prepend(modalDomEl);
@@ -640,7 +645,7 @@ angular.module('mm.foundation.modal', [])
             modalDomEl.detach();
 
             modalDomEl.attr({
-                'style': 'visibility: visible; top: ' + modalPos.top + 'px; left: ' + modalPos.left + 'px; display: block;'
+                'style': 'visibility: visible; top: ' + modalPos.top + 'px; left: ' + modalPos.left + 'px; display: block; position: ' + modalPos.position + ';'
             });
 
             var promises = [];
@@ -649,9 +654,20 @@ angular.module('mm.foundation.modal', [])
                 promises.push($animate.enter(backdropDomEl, body));
             }
             promises.push($animate.enter(modalDomEl, body));
-            promises.push($animate.addClass(body, OPENED_MODAL_CLASS));
+            if (modalPos.position === 'fixed') {
+                body.addClass(OPENED_MODAL_CLASS);
+            }
 
-            return $q.all();
+            return $q.all(promises).then(function () {
+                // VERY BAD: This moves the modal
+                // // If the modal contains any autofocus elements refocus onto the first one
+                // if (modalDomEl[0].querySelectorAll('[autofocus]').length > 0) {
+                //     modalDomEl[0].querySelectorAll('[autofocus]')[0].focus();
+                // } else {
+                //     // otherwise focus the freshly-opened modal
+                //     modalDomEl[0].focus();
+                // }
+            });
         });
     };
 
@@ -662,6 +678,8 @@ angular.module('mm.foundation.modal', [])
             var modalPos = getModalCenter(modalInstance);
             modalDomEl.css('top', modalPos.top + 'px');
             modalDomEl.css('left', modalPos.left + 'px');
+            modalDomEl.css('position', modalPos.position);
+            return modalPos;
         }
     };
 
@@ -742,13 +760,13 @@ angular.module('mm.foundation.modal', [])
                     },
                     dismiss: function dismiss(reason) {
                         $modalStack.dismiss(modalInstance, reason);
-                    },
-                    reposition: function reposition() {
-                        $modalStack.reposition(modalInstance);
                     }
                 };
 
                 // merge and clean up options
+                // reposition: function() {
+                //     $modalStack.reposition(modalInstance);
+                // }
                 var modalOptions = angular.extend({}, $modalProvider.options, modalOpts);
                 modalOptions.resolve = modalOptions.resolve || {};
 
