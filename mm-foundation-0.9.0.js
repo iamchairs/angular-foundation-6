@@ -4,7 +4,7 @@
  * angular-foundation-6
  * http://circlingthesun.github.io/angular-foundation-6/
 
- * Version: 0.9.0 - 2016-03-03
+ * Version: 0.9.0 - 2016-03-04
  * License: MIT
  * (c) 
  */

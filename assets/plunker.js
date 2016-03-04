@@ -13,10 +13,10 @@ angular.module('plunker', [])
 
       var indexContent = function (content, version) {
         return '<!doctype html>\n' +
-          '<html ng-app="plunker">\n' +
+          '<html ng-app="foundationDemoApp">\n' +
           '  <head>\n' +
           '    <script src="//ajax.googleapis.com/ajax/libs/angularjs/'+ngVersion+'/angular.js"></script>\n' +
-          '    <script src="//madmimi.github.io/angular-foundation/mm-foundation-tpls-'+version+'.js"></script>\n' +
+          '    <script src="//pineconellc.github.io/angular-foundation/mm-foundation-tpls-'+version+'.js"></script>\n' +
           '    <script src="example.js"></script>\n' +
           '    <link href="//cdnjs.cloudflare.com/ajax/libs/foundation/'+fdVersion+'/css/foundation.css" rel="stylesheet">\n' +
           '  </head>\n' +
@@ -25,16 +25,16 @@ angular.module('plunker', [])
           '      <div class="small-12.columns">\n' +
                    content + '\n' +
           '      </div>\n' +
-          '    </div>\n'
+          '    </div>\n' +
           '  </body>\n' +
           '</html>\n';
       };
 
       var scriptContent = function(content) {
-        return "angular.module('plunker', ['mm.foundation']);" + "\n" + content;
+        return "angular.module('foundationDemoApp', ['mm.foundation']);" + "\n" + content;
       };
 
-      addField('description', 'http://madmimi.github.io/angular-foundation/');
+      addField('description', 'http://pineconellc.github.io/angular-foundation/');
       addField('files[index.html]', indexContent(content.markup, version));
       addField('files[example.js]', scriptContent(content.javascript));
 
