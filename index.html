@@ -8,7 +8,7 @@
   <meta name="description" content="AngularJS (Angular) native
   directives for Foundation. Small footprint (5kB gzipped!),
   no 3rd party JS dependencies (jQuery, Foundation JS) required!
-  Widgets: Accordion, Alert, Buttons, Dropdown Toggle, Modal, Pagination, Tabs, ">
+  Widgets: Accordion, Alert, Buttons, Dropdown Toggle, Modal, Offcanvas, Pagination, Progressbar, Tabs, ">
 
   <script src="//cdnjs.cloudflare.com/ajax/libs/fastclick/0.6.7/fastclick.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
@@ -25,7 +25,7 @@
     }
   </script>
 
-  <link href="https://cdn.rawgit.com/zurb/foundation-sites/develop/dist/foundation.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.2.0/foundation.min.css" rel="stylesheet"/>
   <!-- <link href="//cdnjs.cloudflare.com/ajax/libs/foundation/6.2.0/css/foundation.min.css" rel="stylesheet"/> -->
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="assets/rainbow.css"/>
@@ -33,6 +33,7 @@
   <link rel="author" href="https://github.com/circlingthesun/angular-foundation-6/graphs/contributors">
 </head>
 <body class="ng-cloak" ng-controller="MainCtrl">
+
 <!-- <div class="fixed">
   <top-bar scrolltop="false">
     <ul class="title-area">
@@ -43,12 +44,12 @@
     </ul>
 
     <top-bar-section>
-      <ul class="right">
+      <ul class="float-right">
         <li><a href="#getting_started">Getting started</a></li>
         <li has-dropdown>
           <a href="#">Directives</a>
           <ul id="directives-list" top-bar-dropdown>
-            <li><a href="#accordion">Accordion</a></li><li><a href="#alert">Alert</a></li><li><a href="#buttons">Buttons</a></li><li><a href="#dropdownToggle">Dropdown Toggle</a></li><li><a href="#modal">Modal</a></li><li><a href="#pagination">Pagination</a></li><li><a href="#tabs">Tabs</a></li>
+            <li><a href="#accordion">Accordion</a></li><li><a href="#alert">Alert</a></li><li><a href="#buttons">Buttons</a></li><li><a href="#dropdownToggle">Dropdown Toggle</a></li><li><a href="#modal">Modal</a></li><li><a href="#offcanvas">Offcanvas</a></li><li><a href="#pagination">Pagination</a></li><li><a href="#progressbar">Progressbar</a></li><li><a href="#tabs">Tabs</a></li>
           </ul>
         </li>
         <li><a href="#animations">Animations</a></li>
@@ -84,6 +85,9 @@
           <div class="page-header">
             <h1>Getting started</h1>
           </div>
+
+          <alert type="'warning'">Please note that this port of Angular Foundation is a work in progress. Not all components have been ported to Foundation for Sites 6.</alert>
+
           <h3>Dependencies</h3>
           <p>
             This repository contains a set of <strong>native AngularJS directives</strong> based on
@@ -111,10 +115,13 @@
         
           <section class="demo" id="accordion">
             <div class="page-header">
-              <h1>Accordion<small>
-                (<a target="_blank" href="https://github.com/circlingthesun/angular-foundation-6/tree/master/src/accordion">mm.foundation.accordion</a>)
-              </small></h1>
+              <h1>Accordion
+                <small>
+                  (<a target="_blank" href="https://github.com/circlingthesun/angular-foundation-6/tree/master/src/accordion">mm.foundation.accordion</a>)
+                </small>
+              </h1>
             </div>
+            <hr>
             <div class="row">
               <div class="columns medium-6 show-grid">
                 <div ng-controller="AccordionDemoCtrl">
@@ -152,11 +159,13 @@
 
               </div>
             </div>
-            <hr>
+            <!-- <hr> -->
             <div class="row code">
               <div class="columns medium-12" ng-controller="PlunkerCtrl">
-                <div class="right">
-                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'accordion')"><i class="fa fa-edit"></i> Edit in plunker</button>
+                <div class="float-right">
+                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'accordion')">
+                    <i class="fa fa-edit"></i> Edit in plunker
+                  </button>
                 </div>
                 <tabset>
                   <tab heading="Markup">
@@ -193,25 +202,22 @@
                   <tab heading="JavaScript">
                     <div plunker-content="javascript">
                       <pre ng-non-bindable><code data-language="javascript">angular.module(&#39;foundationDemoApp&#39;).controller(&#39;AccordionDemoCtrl&#39;, function($scope) {
-  $scope.oneAtATime = true;
+    $scope.oneAtATime = true;
 
-  $scope.groups = [
-    {
-      title: &quot;Dynamic Group Header - 1&quot;,
-      content: &quot;Dynamic Group Body - 1&quot;
-    },
-    {
-      title: &quot;Dynamic Group Header - 2&quot;,
-      content: &quot;Dynamic Group Body - 2&quot;
-    }
-  ];
+    $scope.groups = [{
+        title: &quot;Dynamic Group Header - 1&quot;,
+        content: &quot;Dynamic Group Body - 1&quot;
+    }, {
+        title: &quot;Dynamic Group Header - 2&quot;,
+        content: &quot;Dynamic Group Body - 2&quot;
+    }];
 
-  $scope.items = [&#39;Item 1&#39;, &#39;Item 2&#39;, &#39;Item 3&#39;];
+    $scope.items = [&#39;Item 1&#39;, &#39;Item 2&#39;, &#39;Item 3&#39;];
 
-  $scope.addItem = function() {
-    var newItemNo = $scope.items.length + 1;
-    $scope.items.push(&#39;Item &#39; + newItemNo);
-  };
+    $scope.addItem = function() {
+        var newItemNo = $scope.items.length + 1;
+        $scope.items.push(&#39;Item &#39; + newItemNo);
+    };
 });
 </code></pre>
                     </div>
@@ -221,34 +227,34 @@
             </div>
           </section>
           <script>angular.module('foundationDemoApp').controller('AccordionDemoCtrl', function($scope) {
-  $scope.oneAtATime = true;
+    $scope.oneAtATime = true;
 
-  $scope.groups = [
-    {
-      title: "Dynamic Group Header - 1",
-      content: "Dynamic Group Body - 1"
-    },
-    {
-      title: "Dynamic Group Header - 2",
-      content: "Dynamic Group Body - 2"
-    }
-  ];
+    $scope.groups = [{
+        title: "Dynamic Group Header - 1",
+        content: "Dynamic Group Body - 1"
+    }, {
+        title: "Dynamic Group Header - 2",
+        content: "Dynamic Group Body - 2"
+    }];
 
-  $scope.items = ['Item 1', 'Item 2', 'Item 3'];
+    $scope.items = ['Item 1', 'Item 2', 'Item 3'];
 
-  $scope.addItem = function() {
-    var newItemNo = $scope.items.length + 1;
-    $scope.items.push('Item ' + newItemNo);
-  };
+    $scope.addItem = function() {
+        var newItemNo = $scope.items.length + 1;
+        $scope.items.push('Item ' + newItemNo);
+    };
 });
 </script>
         
           <section class="demo" id="alert">
             <div class="page-header">
-              <h1>Alert<small>
-                (<a target="_blank" href="https://github.com/circlingthesun/angular-foundation-6/tree/master/src/alert">mm.foundation.alert</a>)
-              </small></h1>
+              <h1>Alert
+                <small>
+                  (<a target="_blank" href="https://github.com/circlingthesun/angular-foundation-6/tree/master/src/alert">mm.foundation.alert</a>)
+                </small>
+              </h1>
             </div>
+            <hr>
             <div class="row">
               <div class="columns medium-6 show-grid">
                 <div ng-controller="AlertDemoCtrl">
@@ -264,11 +270,13 @@
 
               </div>
             </div>
-            <hr>
+            <!-- <hr> -->
             <div class="row code">
               <div class="columns medium-12" ng-controller="PlunkerCtrl">
-                <div class="right">
-                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'alert')"><i class="fa fa-edit"></i> Edit in plunker</button>
+                <div class="float-right">
+                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'alert')">
+                    <i class="fa fa-edit"></i> Edit in plunker
+                  </button>
                 </div>
                 <tabset>
                   <tab heading="Markup">
@@ -323,10 +331,13 @@
         
           <section class="demo" id="buttons">
             <div class="page-header">
-              <h1>Buttons<small>
-                (<a target="_blank" href="https://github.com/circlingthesun/angular-foundation-6/tree/master/src/buttons">mm.foundation.buttons</a>)
-              </small></h1>
+              <h1>Buttons
+                <small>
+                  (<a target="_blank" href="https://github.com/circlingthesun/angular-foundation-6/tree/master/src/buttons">mm.foundation.buttons</a>)
+                </small>
+              </h1>
             </div>
+            <hr>
             <div class="row">
               <div class="columns medium-6 show-grid">
                 <div ng-controller="ButtonsCtrl">
@@ -357,11 +368,13 @@
 
               </div>
             </div>
-            <hr>
+            <!-- <hr> -->
             <div class="row code">
               <div class="columns medium-12" ng-controller="PlunkerCtrl">
-                <div class="right">
-                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'buttons')"><i class="fa fa-edit"></i> Edit in plunker</button>
+                <div class="float-right">
+                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'buttons')">
+                    <i class="fa fa-edit"></i> Edit in plunker
+                  </button>
                 </div>
                 <tabset>
                   <tab heading="Markup">
@@ -425,16 +438,19 @@
         
           <section class="demo" id="dropdownToggle">
             <div class="page-header">
-              <h1>Dropdown Toggle<small>
-                (<a target="_blank" href="https://github.com/circlingthesun/angular-foundation-6/tree/master/src/dropdownToggle">mm.foundation.dropdownToggle</a>)
-              </small></h1>
+              <h1>Dropdown Toggle
+                <small>
+                  (<a target="_blank" href="https://github.com/circlingthesun/angular-foundation-6/tree/master/src/dropdownToggle">mm.foundation.dropdownToggle</a>)
+                </small>
+              </h1>
             </div>
+            <hr>
             <div class="row">
               <div class="columns medium-6 show-grid">
                 <div ng-controller="DropdownCtrl">
 
   <dropdown-toggle style="display: block;">
-    <toggle><a>Click me for a dropdown-toggle, yo!</a></toggle>
+    <toggle><p><a>Click me for a dropdown-toggle, yo!</a></p></toggle>
     <pane>
       <ul class="f-dropdown-toggle">
         <li ng-repeat="choice in items">
@@ -445,7 +461,9 @@
   </dropdown-toggle>
 
   <dropdown-toggle style="display: block;">
-    <toggle><a>dropdown-toggles can also have links!</a></toggle>
+    <toggle>
+      <a class="dropdown button">dropdown-toggles can also have links!</a>
+    </toggle>
     <pane>
       <ul>
         <li ng-repeat="(label, url) in linkItems">
@@ -455,21 +473,24 @@
     </pane>
   </dropdown-toggle>
 
-  <dropdown-toggle>
-    <toggle>
-      <a class="button split">
-        Split Button
-        <span dropdown-toggle-toggle="#dropdown-toggle-example-3"></span>
-      </a>
-    </toggle>
-    <pane>
-      <ul>
-        <li ng-repeat="choice in items">
-          <a>{{choice}}</a>
-        </li>
-      </ul>
-    </pane>
-  </dropdown-toggle>
+  <div class="button-group">
+    <a class="button">Primary Action</a>
+    <dropdown-toggle>
+      <toggle>
+        <a class="dropdown button arrow-only">
+          <span class="show-for-sr">Show menu</span>
+        </a>
+      </toggle>
+      <pane>
+        <ul>
+          <li ng-repeat="choice in items">
+            <a>{{choice}}</a>
+          </li>
+        </ul>
+      </pane>
+    </dropdown-toggle>
+  </div>
+
 </div>
 
               </div>
@@ -478,11 +499,13 @@
 
               </div>
             </div>
-            <hr>
+            <!-- <hr> -->
             <div class="row code">
               <div class="columns medium-12" ng-controller="PlunkerCtrl">
-                <div class="right">
-                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'dropdownToggle')"><i class="fa fa-edit"></i> Edit in plunker</button>
+                <div class="float-right">
+                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'dropdownToggle')">
+                    <i class="fa fa-edit"></i> Edit in plunker
+                  </button>
                 </div>
                 <tabset>
                   <tab heading="Markup">
@@ -490,7 +513,7 @@
                       <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;DropdownCtrl&quot;&gt;
 
   &lt;dropdown-toggle style=&quot;display: block;&quot;&gt;
-    &lt;toggle&gt;&lt;a&gt;Click me for a dropdown-toggle, yo!&lt;/a&gt;&lt;/toggle&gt;
+    &lt;toggle&gt;&lt;p&gt;&lt;a&gt;Click me for a dropdown-toggle, yo!&lt;/a&gt;&lt;/p&gt;&lt;/toggle&gt;
     &lt;pane&gt;
       &lt;ul class=&quot;f-dropdown-toggle&quot;&gt;
         &lt;li ng-repeat=&quot;choice in items&quot;&gt;
@@ -501,7 +524,9 @@
   &lt;/dropdown-toggle&gt;
 
   &lt;dropdown-toggle style=&quot;display: block;&quot;&gt;
-    &lt;toggle&gt;&lt;a&gt;dropdown-toggles can also have links!&lt;/a&gt;&lt;/toggle&gt;
+    &lt;toggle&gt;
+      &lt;a class=&quot;dropdown button&quot;&gt;dropdown-toggles can also have links!&lt;/a&gt;
+    &lt;/toggle&gt;
     &lt;pane&gt;
       &lt;ul&gt;
         &lt;li ng-repeat=&quot;(label, url) in linkItems&quot;&gt;
@@ -511,21 +536,24 @@
     &lt;/pane&gt;
   &lt;/dropdown-toggle&gt;
 
-  &lt;dropdown-toggle&gt;
-    &lt;toggle&gt;
-      &lt;a class=&quot;button split&quot;&gt;
-        Split Button
-        &lt;span dropdown-toggle-toggle=&quot;#dropdown-toggle-example-3&quot;&gt;&lt;/span&gt;
-      &lt;/a&gt;
-    &lt;/toggle&gt;
-    &lt;pane&gt;
-      &lt;ul&gt;
-        &lt;li ng-repeat=&quot;choice in items&quot;&gt;
-          &lt;a&gt;{{choice}}&lt;/a&gt;
-        &lt;/li&gt;
-      &lt;/ul&gt;
-    &lt;/pane&gt;
-  &lt;/dropdown-toggle&gt;
+  &lt;div class=&quot;button-group&quot;&gt;
+    &lt;a class=&quot;button&quot;&gt;Primary Action&lt;/a&gt;
+    &lt;dropdown-toggle&gt;
+      &lt;toggle&gt;
+        &lt;a class=&quot;dropdown button arrow-only&quot;&gt;
+          &lt;span class=&quot;show-for-sr&quot;&gt;Show menu&lt;/span&gt;
+        &lt;/a&gt;
+      &lt;/toggle&gt;
+      &lt;pane&gt;
+        &lt;ul&gt;
+          &lt;li ng-repeat=&quot;choice in items&quot;&gt;
+            &lt;a&gt;{{choice}}&lt;/a&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/pane&gt;
+    &lt;/dropdown-toggle&gt;
+  &lt;/div&gt;
+
 &lt;/div&gt;
 </code></pre>
                     </div>
@@ -565,10 +593,13 @@
         
           <section class="demo" id="modal">
             <div class="page-header">
-              <h1>Modal<small>
-                (<a target="_blank" href="https://github.com/circlingthesun/angular-foundation-6/tree/master/src/modal">mm.foundation.modal</a>)
-              </small></h1>
+              <h1>Modal
+                <small>
+                  (<a target="_blank" href="https://github.com/circlingthesun/angular-foundation-6/tree/master/src/modal">mm.foundation.modal</a>)
+                </small>
+              </h1>
             </div>
+            <hr>
             <div class="row">
               <div class="columns medium-6 show-grid">
                 <div ng-controller="ModalDemoCtrl">
@@ -587,6 +618,12 @@
   </script>
 
   <button class="button" ng-click="open()">Open me!</button>
+  <button class="button" ng-click="open('', false)">No backdrop</button>
+  <button class="button" ng-click="open('', true, 40)">Overflow</button>
+  <button class="button" ng-click="open('tiny')">Tiny</button>
+  <button class="button" ng-click="open('small')">Small</button>
+  <button class="button" ng-click="open('large')">Large</button>
+  <button class="button" ng-click="open('full')">Fullscreen</button>
   <div ng-show="selected">Selection from a modal: {{ selected }}</div>
 </div>
 
@@ -605,6 +642,7 @@ Creating custom modals is straightforward: create a partial view, its controller
 <li><code>backdrop</code> - controls presence of a backdrop. Allowed values: true (default), false (no backdrop), <code>&#39;static&#39;</code> - backdrop is present but modal window is not closed when clicking outside of the modal window.</li>
 <li><code>keyboard</code> - indicates whether the dialog should be closable by hitting the ESC key, defaults to true</li>
 <li><code>windowClass</code> - additional CSS class(es) to be added to a modal window template</li>
+<li><code>size</code> - controls the size of the modal. Allowed values: <code>tiny</code>, <code>small</code>, <code>large</code>, and <code>full</code>.</li>
 </ul>
 <p>The <code>open</code> method returns a modal instance, an object with the following properties:</p>
 <ul>
@@ -622,11 +660,13 @@ Creating custom modals is straightforward: create a partial view, its controller
 
               </div>
             </div>
-            <hr>
+            <!-- <hr> -->
             <div class="row code">
               <div class="columns medium-12" ng-controller="PlunkerCtrl">
-                <div class="right">
-                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'modal')"><i class="fa fa-edit"></i> Edit in plunker</button>
+                <div class="float-right">
+                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'modal')">
+                    <i class="fa fa-edit"></i> Edit in plunker
+                  </button>
                 </div>
                 <tabset>
                   <tab heading="Markup">
@@ -647,6 +687,12 @@ Creating custom modals is straightforward: create a partial view, its controller
   &lt;/script&gt;
 
   &lt;button class=&quot;button&quot; ng-click=&quot;open()&quot;&gt;Open me!&lt;/button&gt;
+  &lt;button class=&quot;button&quot; ng-click=&quot;open(&#39;&#39;, false)&quot;&gt;No backdrop&lt;/button&gt;
+  &lt;button class=&quot;button&quot; ng-click=&quot;open(&#39;&#39;, true, 40)&quot;&gt;Overflow&lt;/button&gt;
+  &lt;button class=&quot;button&quot; ng-click=&quot;open(&#39;tiny&#39;)&quot;&gt;Tiny&lt;/button&gt;
+  &lt;button class=&quot;button&quot; ng-click=&quot;open(&#39;small&#39;)&quot;&gt;Small&lt;/button&gt;
+  &lt;button class=&quot;button&quot; ng-click=&quot;open(&#39;large&#39;)&quot;&gt;Large&lt;/button&gt;
+  &lt;button class=&quot;button&quot; ng-click=&quot;open(&#39;full&#39;)&quot;&gt;Fullscreen&lt;/button&gt;
   &lt;div ng-show=&quot;selected&quot;&gt;Selection from a modal: {{ selected }}&lt;/div&gt;
 &lt;/div&gt;
 </code></pre>
@@ -656,15 +702,18 @@ Creating custom modals is straightforward: create a partial view, its controller
                     <div plunker-content="javascript">
                       <pre ng-non-bindable><code data-language="javascript">angular.module(&#39;foundationDemoApp&#39;).controller(&#39;ModalDemoCtrl&#39;, function($scope, $modal, $log) {
 
-    $scope.items = [&#39;item1&#39;, &#39;item2&#39;, &#39;item3&#39;];
 
-    // for(var i = 0; i &lt; 10; i++){
-    //   $scope.items.push(&#39;item &#39; + i);
-    // }
+    $scope.open = function(size, backdrop, itemCount) {
 
-    $scope.open = function() {
+        $scope.items = [];
 
-        var modalInstance = $modal.open({
+        var count = itemCount || 3;
+
+        for(var i = 0; i &lt; count; i++){
+            $scope.items.push(&#39;item &#39; + i);
+        }
+
+        var params = {
             templateUrl: &#39;myModalContent.html&#39;,
             controller: &#39;ModalInstanceCtrl&#39;,
             resolve: {
@@ -672,7 +721,17 @@ Creating custom modals is straightforward: create a partial view, its controller
                     return $scope.items;
                 }
             }
-        });
+        };
+
+        if(angular.isDefined(size)){
+            params.size = size;
+        }
+
+        if(angular.isDefined(backdrop)){
+            params.backdrop = backdrop;
+        }
+
+        var modalInstance = $modal.open(params);
 
         modalInstance.result.then(function(selectedItem) {
             $scope.selected = selectedItem;
@@ -713,15 +772,18 @@ angular.module(&#39;foundationDemoApp&#39;).controller(&#39;ModalInstanceCtrl&#3
           </section>
           <script>angular.module('foundationDemoApp').controller('ModalDemoCtrl', function($scope, $modal, $log) {
 
-    $scope.items = ['item1', 'item2', 'item3'];
 
-    // for(var i = 0; i < 10; i++){
-    //   $scope.items.push('item ' + i);
-    // }
+    $scope.open = function(size, backdrop, itemCount) {
 
-    $scope.open = function() {
+        $scope.items = [];
 
-        var modalInstance = $modal.open({
+        var count = itemCount || 3;
+
+        for(var i = 0; i < count; i++){
+            $scope.items.push('item ' + i);
+        }
+
+        var params = {
             templateUrl: 'myModalContent.html',
             controller: 'ModalInstanceCtrl',
             resolve: {
@@ -729,7 +791,17 @@ angular.module(&#39;foundationDemoApp&#39;).controller(&#39;ModalInstanceCtrl&#3
                     return $scope.items;
                 }
             }
-        });
+        };
+
+        if(angular.isDefined(size)){
+            params.size = size;
+        }
+
+        if(angular.isDefined(backdrop)){
+            params.backdrop = backdrop;
+        }
+
+        var modalInstance = $modal.open(params);
 
         modalInstance.result.then(function(selectedItem) {
             $scope.selected = selectedItem;
@@ -763,12 +835,149 @@ angular.module('foundationDemoApp').controller('ModalInstanceCtrl', function($sc
 });
 </script>
         
+          <section class="demo" id="offcanvas">
+            <div class="page-header">
+              <h1>Offcanvas
+                <small>
+                  (<a target="_blank" href="https://github.com/circlingthesun/angular-foundation-6/tree/master/src/offcanvas">mm.foundation.offcanvas</a>)
+                </small>
+              </h1>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="columns medium-6 show-grid">
+                <div ng-controller="OffCanvasDemoCtrl">
+    <div class="off-canvas-wrapper">
+        <div class="off-canvas-wrapper-inner">
+            <div class="title-bar">
+                <div class="title-bar-left">
+                    <a class="left-off-canvas-toggle menu-icon" ><span></span></a>
+                    <span class="title-bar-title">Foundation</span>
+                </div>
+
+                <div class="title-bar-right">
+                    <a class="right-off-canvas-toggle menu-icon" ><span></span></a>
+                </div>
+
+            </div>
+
+            <div class="off-canvas position-left">
+                left
+<!--                 <ul class="off-canvas-list">
+                    <li><a href="#">Left Sidebar</a></li>
+                </ul> -->
+            </div>
+            <div class="off-canvas position-right">
+                right
+<!--                 <ul class="off-canvas-list">
+                    <li><a href="#">Right Sidebar</a></li>
+                </ul> -->
+            </div>
+            <div class="off-canvas-content">
+                <div class="small-12 columns">
+                    <h1>How to use</h1>
+                    <p>Just use the standard layout for an offcanvas page as documented in the <a href="http://foundation.zurb.com/docs/components/offcanvas.html">foundation docs</a></p>
+                    <p>As long as you include mm.foundation.offcanvas it should simply work</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+              </div>
+              <div class="columns medium-6">
+                <p>A lightweight directive that provides the <a href="http://foundation.zurb.com/docs/components/offcanvas.html">Foundation Offcanvas</a> component.</p>
+<p>There are no settings. You simply need to include the foundation off canvas CSS component in your page.</p>
+<p>The off canvas module expects the use of several nested elements with the following classes:</p>
+<ul>
+<li><code>off-canvas-wrapper</code>: The most outter page wrapper.</li>
+<li><code>inner-wrapper</code>: Second page wrapper nested directly inside off-canvas-wrapper.</li>
+<li><code>left-off-canvas-toggle</code>: Wraps the left off canvas menu.</li>
+<li><code>right-off-canvas-toggle</code>: Wraps the right off canvas menu.</li>
+<li><code>exit-off-canvas</code>: Occludes the main page content when an off canvas menu is visible. Hides the menu when clicked.</li>
+<li><code>off-canvas-list</code>: Contains off canvas menu items. Hides the menu after a nested link is clicked.</li>
+</ul>
+<p>See the demo page for example on how to use this and see the <a href="http://foundation.zurb.com/docs/components/offcanvas.html">Foundation docs</a> for more details.</p>
+
+              </div>
+            </div>
+            <!-- <hr> -->
+            <div class="row code">
+              <div class="columns medium-12" ng-controller="PlunkerCtrl">
+                <div class="float-right">
+                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'offcanvas')">
+                    <i class="fa fa-edit"></i> Edit in plunker
+                  </button>
+                </div>
+                <tabset>
+                  <tab heading="Markup">
+                    <div plunker-content="markup">
+                      <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;OffCanvasDemoCtrl&quot;&gt;
+    &lt;div class=&quot;off-canvas-wrapper&quot;&gt;
+        &lt;div class=&quot;off-canvas-wrapper-inner&quot;&gt;
+            &lt;div class=&quot;title-bar&quot;&gt;
+                &lt;div class=&quot;title-bar-left&quot;&gt;
+                    &lt;a class=&quot;left-off-canvas-toggle menu-icon&quot; &gt;&lt;span&gt;&lt;/span&gt;&lt;/a&gt;
+                    &lt;span class=&quot;title-bar-title&quot;&gt;Foundation&lt;/span&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;title-bar-right&quot;&gt;
+                    &lt;a class=&quot;right-off-canvas-toggle menu-icon&quot; &gt;&lt;span&gt;&lt;/span&gt;&lt;/a&gt;
+                &lt;/div&gt;
+
+            &lt;/div&gt;
+
+            &lt;div class=&quot;off-canvas position-left&quot;&gt;
+                left
+&lt;!--                 &lt;ul class=&quot;off-canvas-list&quot;&gt;
+                    &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Left Sidebar&lt;/a&gt;&lt;/li&gt;
+                &lt;/ul&gt; --&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;off-canvas position-right&quot;&gt;
+                right
+&lt;!--                 &lt;ul class=&quot;off-canvas-list&quot;&gt;
+                    &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Right Sidebar&lt;/a&gt;&lt;/li&gt;
+                &lt;/ul&gt; --&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;off-canvas-content&quot;&gt;
+                &lt;div class=&quot;small-12 columns&quot;&gt;
+                    &lt;h1&gt;How to use&lt;/h1&gt;
+                    &lt;p&gt;Just use the standard layout for an offcanvas page as documented in the &lt;a href=&quot;http://foundation.zurb.com/docs/components/offcanvas.html&quot;&gt;foundation docs&lt;/a&gt;&lt;/p&gt;
+                    &lt;p&gt;As long as you include mm.foundation.offcanvas it should simply work&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+                    </div>
+                  </tab>
+                  <tab heading="JavaScript">
+                    <div plunker-content="javascript">
+                      <pre ng-non-bindable><code data-language="javascript">angular.module(&#39;foundationDemoApp&#39;).controller(&#39;OffCanvasDemoCtrl&#39;, function ($scope) {
+
+});
+</code></pre>
+                    </div>
+                  </tab>
+                </tabset>
+              </div>
+            </div>
+          </section>
+          <script>angular.module('foundationDemoApp').controller('OffCanvasDemoCtrl', function ($scope) {
+
+});
+</script>
+        
           <section class="demo" id="pagination">
             <div class="page-header">
-              <h1>Pagination<small>
-                (<a target="_blank" href="https://github.com/circlingthesun/angular-foundation-6/tree/master/src/pagination">mm.foundation.pagination</a>)
-              </small></h1>
+              <h1>Pagination
+                <small>
+                  (<a target="_blank" href="https://github.com/circlingthesun/angular-foundation-6/tree/master/src/pagination">mm.foundation.pagination</a>)
+                </small>
+              </h1>
             </div>
+            <hr>
             <div class="row">
               <div class="columns medium-6 show-grid">
                 <div ng-controller="PaginationDemoCtrl">
@@ -869,11 +1078,13 @@ angular.module('foundationDemoApp').controller('ModalInstanceCtrl', function($sc
 
               </div>
             </div>
-            <hr>
+            <!-- <hr> -->
             <div class="row code">
               <div class="columns medium-12" ng-controller="PlunkerCtrl">
-                <div class="right">
-                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'pagination')"><i class="fa fa-edit"></i> Edit in plunker</button>
+                <div class="float-right">
+                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'pagination')">
+                    <i class="fa fa-edit"></i> Edit in plunker
+                  </button>
                 </div>
                 <tabset>
                   <tab heading="Markup">
@@ -935,12 +1146,181 @@ angular.module('foundationDemoApp').controller('ModalInstanceCtrl', function($sc
 });
 </script>
         
+          <section class="demo" id="progressbar">
+            <div class="page-header">
+              <h1>Progressbar
+                <small>
+                  (<a target="_blank" href="https://github.com/circlingthesun/angular-foundation-6/tree/master/src/progressbar">mm.foundation.progressbar</a>)
+                </small>
+              </h1>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="columns medium-6 show-grid">
+                <div ng-controller="ProgressDemoCtrl">
+    <style>
+      .progress .progress-meter {
+        -webkit-transition: width 1s ease-out;
+        transition: width 1s ease-out;
+      }
+    </style>
+
+    <h3>Static</h3>
+    <div class="row">
+        <div class="columns small-4"><progressbar value="55"></progressbar></div>
+        <div class="columns small-4"><progressbar value="22" type="warning">22%</progressbar></div>
+        <div class="columns small-4"><progressbar max="200" value="166" type="alert">166 / 200</progressbar></div>
+    </div>
+
+    <hr />
+    <h3>Dynamic <button class="button small" type="button" ng-click="random()">Randomize</button></h3>
+    <progressbar max="max" value="dynamic">{{dynamic}} / {{max}}</progressbar>
+
+    <small><em>No animation</em></small>
+    <progressbar animate="false" value="dynamic" type="success">{{dynamic}}%</progressbar>
+
+    <small><em>Object (changes type based on value)</em></small>
+    <progressbar class="progress-striped active" value="dynamic" type="{{type}}">{{type}} <i ng-show="showWarning">!!! Watch out !!!</i></progressbar>
+
+</div>
+
+              </div>
+              <div class="columns medium-6">
+                <p>A progress bar directive that is focused on providing feedback on the progress of a workflow or action.</p>
+<p>It supports multiple (stacked) bars into the same <code>&lt;progress&gt;</code> element or a single <code>&lt;progressbar&gt;</code> element with optional <code>max</code> attribute and transition animations.</p>
+<h3 id="settings">Settings</h3>
+<h4 id="-progressbar-"><code>&lt;progressbar&gt;</code></h4>
+<ul>
+<li><p><code>value</code> <i class="fa-eye"></i>
+  :
+  The current value of progress completed.</p>
+</li>
+<li><p><code>type</code>
+  <em>(Default: null)</em> :
+  Style type. Possible values are &#39;success&#39;, &#39;warning&#39; etc.</p>
+</li>
+<li><p><code>max</code>
+  <em>(Default: 100)</em> :
+  A number that specifies the total value of bars that is required.</p>
+</li>
+<li><p><code>animate</code>
+  <em>(Default: true)</em> :
+  Whether bars use transitions to achieve the width change. <strong>IMPORTANT:</strong> Foundation&#39;s CSS does not not apply a <code>transition</code> to progress bars. In order for animations to work, you&#39;ll need to apply a <code>transition</code> in your own CSS. See the demo for an example.</p>
+</li>
+</ul>
+
+              </div>
+            </div>
+            <!-- <hr> -->
+            <div class="row code">
+              <div class="columns medium-12" ng-controller="PlunkerCtrl">
+                <div class="float-right">
+                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'progressbar')">
+                    <i class="fa fa-edit"></i> Edit in plunker
+                  </button>
+                </div>
+                <tabset>
+                  <tab heading="Markup">
+                    <div plunker-content="markup">
+                      <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;ProgressDemoCtrl&quot;&gt;
+    &lt;style&gt;
+      .progress .progress-meter {
+        -webkit-transition: width 1s ease-out;
+        transition: width 1s ease-out;
+      }
+    &lt;/style&gt;
+
+    &lt;h3&gt;Static&lt;/h3&gt;
+    &lt;div class=&quot;row&quot;&gt;
+        &lt;div class=&quot;columns small-4&quot;&gt;&lt;progressbar value=&quot;55&quot;&gt;&lt;/progressbar&gt;&lt;/div&gt;
+        &lt;div class=&quot;columns small-4&quot;&gt;&lt;progressbar value=&quot;22&quot; type=&quot;warning&quot;&gt;22%&lt;/progressbar&gt;&lt;/div&gt;
+        &lt;div class=&quot;columns small-4&quot;&gt;&lt;progressbar max=&quot;200&quot; value=&quot;166&quot; type=&quot;alert&quot;&gt;166 / 200&lt;/progressbar&gt;&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;hr /&gt;
+    &lt;h3&gt;Dynamic &lt;button class=&quot;button small&quot; type=&quot;button&quot; ng-click=&quot;random()&quot;&gt;Randomize&lt;/button&gt;&lt;/h3&gt;
+    &lt;progressbar max=&quot;max&quot; value=&quot;dynamic&quot;&gt;{{dynamic}} / {{max}}&lt;/progressbar&gt;
+
+    &lt;small&gt;&lt;em&gt;No animation&lt;/em&gt;&lt;/small&gt;
+    &lt;progressbar animate=&quot;false&quot; value=&quot;dynamic&quot; type=&quot;success&quot;&gt;{{dynamic}}%&lt;/progressbar&gt;
+
+    &lt;small&gt;&lt;em&gt;Object (changes type based on value)&lt;/em&gt;&lt;/small&gt;
+    &lt;progressbar class=&quot;progress-striped active&quot; value=&quot;dynamic&quot; type=&quot;{{type}}&quot;&gt;{{type}} &lt;i ng-show=&quot;showWarning&quot;&gt;!!! Watch out !!!&lt;/i&gt;&lt;/progressbar&gt;
+
+&lt;/div&gt;
+</code></pre>
+                    </div>
+                  </tab>
+                  <tab heading="JavaScript">
+                    <div plunker-content="javascript">
+                      <pre ng-non-bindable><code data-language="javascript">angular.module(&#39;foundationDemoApp&#39;).controller(&#39;ProgressDemoCtrl&#39;, function ($scope) {
+  
+  $scope.max = 200;
+
+  $scope.random = function() {
+    var value = Math.floor((Math.random() * 100) + 1);
+    var type;
+
+    if (value &lt; 25) {
+      type = &#39;success&#39;;
+    } else if (value &lt; 50) {
+      type = &#39;info&#39;;
+    } else if (value &lt; 75) {
+      type = &#39;warning&#39;;
+    } else {
+      type = &#39;alert&#39;;
+    }
+
+    $scope.showWarning = (type === &#39;alert&#39; || type === &#39;warning&#39;);
+
+    $scope.dynamic = value;
+    $scope.type = type;
+  };
+  $scope.random();
+});
+</code></pre>
+                    </div>
+                  </tab>
+                </tabset>
+              </div>
+            </div>
+          </section>
+          <script>angular.module('foundationDemoApp').controller('ProgressDemoCtrl', function ($scope) {
+  
+  $scope.max = 200;
+
+  $scope.random = function() {
+    var value = Math.floor((Math.random() * 100) + 1);
+    var type;
+
+    if (value < 25) {
+      type = 'success';
+    } else if (value < 50) {
+      type = 'info';
+    } else if (value < 75) {
+      type = 'warning';
+    } else {
+      type = 'alert';
+    }
+
+    $scope.showWarning = (type === 'alert' || type === 'warning');
+
+    $scope.dynamic = value;
+    $scope.type = type;
+  };
+  $scope.random();
+});
+</script>
+        
           <section class="demo" id="tabs">
             <div class="page-header">
-              <h1>Tabs<small>
-                (<a target="_blank" href="https://github.com/circlingthesun/angular-foundation-6/tree/master/src/tabs">mm.foundation.tabs</a>)
-              </small></h1>
+              <h1>Tabs
+                <small>
+                  (<a target="_blank" href="https://github.com/circlingthesun/angular-foundation-6/tree/master/src/tabs">mm.foundation.tabs</a>)
+                </small>
+              </h1>
             </div>
+            <hr>
             <div class="row">
               <div class="columns medium-6 show-grid">
                 <div ng-controller="TabsDemoCtrl">
@@ -1007,11 +1387,13 @@ Whether to open an active tab automatically.</p>
 
               </div>
             </div>
-            <hr>
+            <!-- <hr> -->
             <div class="row code">
               <div class="columns medium-12" ng-controller="PlunkerCtrl">
-                <div class="right">
-                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'tabs')"><i class="fa fa-edit"></i> Edit in plunker</button>
+                <div class="float-right">
+                  <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.0', '6.2.0', '0.9.0', 'tabs')">
+                    <i class="fa fa-edit"></i> Edit in plunker
+                  </button>
                 </div>
                 <tabset>
                   <tab heading="Markup">
@@ -1093,7 +1475,7 @@ Whether to open an active tab automatically.</p>
             <div class="columns medium-12">
             </div>
           </div>
-          <hr>
+          <!-- <hr> -->
           <div class="row code">
             <div class="columns medium-12">
               <pre><code data-language="scss">$motion-ui-classes: (
@@ -1192,6 +1574,6 @@ Whether to open an active tab automatically.</p>
   </div>
 </script>
 
-<!-- <script src="assets/smoothscroll-angular-custom.js"></script> -->
+</div>
 </body>
 </html>

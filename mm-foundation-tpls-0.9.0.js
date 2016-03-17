@@ -4,13 +4,14 @@
  * angular-foundation-6
  * http://circlingthesun.github.io/angular-foundation-6/
 
- * Version: 0.9.0 - 2016-03-04
+ * Version: 0.9.0 - 2016-03-17
  * License: MIT
  * (c) 
  */
 
 AccordionController.$inject = ['$scope', '$attrs', 'accordionConfig'];
-DropdownToggleController.$inject = ['$scope', '$attrs', 'mediaQueries', '$element', '$position', '$window'];
+DropdownToggleController.$inject = ['$scope', '$attrs', 'mediaQueries', '$element', '$position'];
+dropdownToggle.$inject = ['$document', '$window', '$location'];
 function AccordionController($scope, $attrs, accordionConfig) {
     'ngInject';
 
@@ -280,21 +281,7 @@ angular.module('mm.foundation.buttons', []).constant('buttonConfig', {
     };
 });
 
-/*
- * dropdownToggle - Provides dropdown menu functionality
- * @restrict class or attribute
- * @example:
-
-   <a dropdown-toggle="#dropdown-menu">My Dropdown Menu</a>
-   <ul id="dropdown-menu" class="f-dropdown">
-     <li ng-repeat="choice in dropChoices">
-       <a ng-href="{{choice.href}}">{{choice.text}}</a>
-     </li>
-   </ul>
- */
-var mod = angular.module('mm.foundation.dropdownToggle', ['mm.foundation.position', 'mm.foundation.mediaQueries']);
-
-function DropdownToggleController($scope, $attrs, mediaQueries, $element, $position, $window) {
+function DropdownToggleController($scope, $attrs, mediaQueries, $element, $position) {
     'ngInject';
 
     var $ctrl = this;
@@ -311,23 +298,23 @@ function DropdownToggleController($scope, $attrs, mediaQueries, $element, $posit
         }
 
         var dropdown = angular.element($element[0].querySelector('.dropdown-pane'));
-        var dropdownTrigger = angular.element($element[0].querySelector('toggle'));
+        var dropdownTrigger = angular.element($element[0].querySelector('toggle *:first-child'));
 
-        var dropdownWidth = dropdown.prop('offsetWidth');
+        // var dropdownWidth = dropdown.prop('offsetWidth');
         var triggerPosition = $position.position(dropdownTrigger);
 
-        $ctrl.css.top = triggerPosition.top + triggerPosition.height + 5 + 'px';
+        $ctrl.css.top = triggerPosition.top + triggerPosition.height + 2 + 'px';
         $ctrl.css.left = triggerPosition.left + 'px';
 
-        if (mediaQueries.small() && !mediaQueries.medium()) {}
+        // if (mediaQueries.small() && !mediaQueries.medium()) {
+
+        // }
     };
 }
 
-mod.directive('dropdownToggle', ['$document', '$window', '$location', '$position', function ($document, $window, $location, $position) {
+function dropdownToggle($document, $window, $location) {
     'ngInject';
 
-    var openElement = null;
-    var closeMenu = angular.noop;
     return {
         scope: {},
         restrict: 'EA',
@@ -339,7 +326,21 @@ mod.directive('dropdownToggle', ['$document', '$window', '$location', '$position
         controller: DropdownToggleController,
         controllerAs: '$ctrl'
     };
-}]);
+}
+
+/*
+ * dropdownToggle - Provides dropdown menu functionality
+ * @restrict class or attribute
+ * @example:
+
+   <a dropdown-toggle="#dropdown-menu">My Dropdown Menu</a>
+   <ul id="dropdown-menu" class="f-dropdown">
+     <li ng-repeat="choice in dropChoices">
+       <a ng-href="{{choice.href}}">{{choice.text}}</a>
+     </li>
+   </ul>
+ */
+angular.module('mm.foundation.dropdownToggle', ['mm.foundation.position', 'mm.foundation.mediaQueries']).directive('dropdownToggle', dropdownToggle);
 
 (function () {
     angular.module("mm.foundation.dropdownToggle").run(["$templateCache", function ($templateCache) {
@@ -594,7 +595,7 @@ angular.module('mm.foundation.modal', [])
             top = parseInt((windowHeight - height) / 4, 10);
         }
 
-        var fitsWindow = windowHeight >= top + height;
+        var fitsWindow = windowHeight >= top + height; // ALwats fits on mobile
 
         var modalPos = options.modalPos = options.modalPos || {};
 
@@ -646,9 +647,13 @@ angular.module('mm.foundation.modal', [])
             angular.element($window).bind('resize', resizeHandler);
         }
 
+        var classes = [];
+        options.windowClass && classes.push(options.windowClass);
+        options.size && classes.push(options.size);
+
         var modalDomEl = angular.element('<div modal-window></div>').attr({
             'style': 'visibility: visible; z-index: -1; display: block;',
-            'window-class': options.windowClass,
+            'window-class': classes.join(' '),
             'index': openedWindows.length() - 1
         });
         modalDomEl.html(options.content);
@@ -827,7 +832,8 @@ angular.module('mm.foundation.modal', [])
                         content: tplAndVars[0],
                         backdrop: modalOptions.backdrop,
                         keyboard: modalOptions.keyboard,
-                        windowClass: modalOptions.windowClass
+                        windowClass: modalOptions.windowClass,
+                        size: modalOptions.size
                     });
                 }, function resolveError(reason) {
                     modalResultDeferred.reject(reason);
@@ -855,6 +861,100 @@ angular.module('mm.foundation.modal', [])
         $templateCache.put("template/modal/window.html", "<div tabindex=\"-1\" class=\"reveal without-overlay {{ windowClass }}\" style=\"display: block; visibility: visible;\">\n  <div ng-transclude></div>\n</div>\n");
     }]);
 })();
+angular.module('mm.foundation.offcanvas', []).directive('offCanvasWrapper', ['$window', function ($window) {
+    'ngInject';
+
+    return {
+        scope: {},
+        restrict: 'C',
+        controller: ['$scope', '$element', function controller($scope, $element) {
+            'ngInject';
+
+            var $ctrl = this;
+
+            var left = angular.element($element[0].querySelector('.position-left'));
+            var right = angular.element($element[0].querySelector('.position-right'));
+            var inner = angular.element($element[0].querySelector('.off-canvas-wrapper-inner'));
+
+            $ctrl.leftToggle = function () {
+                inner && inner.toggleClass('is-off-canvas-open');
+                inner && inner.toggleClass('is-open-left');
+                left && left.toggleClass('is-open');
+            };
+
+            $ctrl.rightToggle = function () {
+                inner && inner.toggleClass('is-off-canvas-open');
+                inner && inner.toggleClass('is-open-right');
+                right && right.toggleClass('is-open');
+            };
+
+            $ctrl.hide = function () {
+                inner && inner.removeClass('is-open-left');
+                inner && inner.removeClass('is-open-right');
+                left && left.removeClass('is-open');
+                right && right.removeClass('is-open');
+                inner && inner.removeClass('is-off-canvas-open');
+            };
+
+            var win = angular.element($window);
+
+            win.bind('resize.body', $ctrl.hide);
+
+            $scope.$on('$destroy', function () {
+                win.unbind('resize.body', $ctrl.hide);
+            });
+        }]
+    };
+}]).directive('leftOffCanvasToggle', function () {
+    'ngInject';
+
+    return {
+        require: '^offCanvasWrapper',
+        restrict: 'C',
+        link: function link($scope, element, attrs, offCanvasWrapper) {
+            element.on('click', function () {
+                offCanvasWrapper.leftToggle();
+            });
+        }
+    };
+}).directive('rightOffCanvasToggle', function () {
+    'ngInject';
+
+    return {
+        require: '^offCanvasWrapper',
+        restrict: 'C',
+        link: function link($scope, element, attrs, offCanvasWrapper) {
+            element.on('click', function () {
+                offCanvasWrapper.rightToggle();
+            });
+        }
+    };
+}).directive('exitOffCanvas', function () {
+    'ngInject';
+
+    return {
+        require: '^offCanvasWrapper',
+        restrict: 'C',
+        link: function link($scope, element, attrs, offCanvasWrap) {
+            element.on('click', function () {
+                offCanvasWrap.hide();
+            });
+        }
+    };
+}).directive('offCanvasList', function () {
+    'ngInject';
+
+    return {
+        require: '^offCanvasWrapper',
+        restrict: 'C',
+        link: function link($scope, element, attrs, offCanvasWrap) {
+            element.on('click', function () {
+                offCanvasWrap.hide();
+            });
+        }
+    };
+});
+
 angular.module('mm.foundation.pagination', []).controller('PaginationController', ['$scope', '$attrs', '$parse', '$interpolate', function ($scope, $attrs, $parse, $interpolate) {
     var self = this,
         setNumPages = $attrs.numPages ? $parse($attrs.numPages).assign : angular.noop;
@@ -1094,7 +1194,7 @@ angular.module('mm.foundation.pagination', []).controller('PaginationController'
 (function () {
     angular.module("mm.foundation.pagination").run(["$templateCache", function ($templateCache) {
         $templateCache.put("template/pagination/pager.html", "<ul class=\"pagination\">\n  <li ng-repeat=\"page in pages\" class=\"arrow\" ng-class=\"{unavailable: page.disabled, left: page.previous, right: page.next}\"><a ng-click=\"selectPage(page.number)\">{{page.text}}</a></li>\n</ul>\n");
-        $templateCache.put("template/pagination/pagination.html", "<ul class=\"pagination\">\n  <li ng-repeat=\"page in pages\" ng-class=\"{arrow: $first || $last, current: page.active, unavailable: page.disabled}\"><a ng-click=\"selectPage(page.number)\">{{page.text}}</a></li>\n</ul>\n");
+        $templateCache.put("template/pagination/pagination.html", "<ul class=\"pagination\" role=\"navigation\" aria-label=\"Pagination\">\n  <li ng-repeat=\"page in pages\"\n    ng-class=\"{\n        \'pagination-previous\': $first,\n        \'pagination-next\': $last,\n        current: page.active,\n        unavailable: page.disabled\n        }\">\n    <a ng-if=\"!page.active\" ng-click=\"selectPage(page.number)\">{{page.text}}</a>\n    <span ng-if=\"page.active\">{{page.text}}</span>\n  </li>\n</ul>\n");
     }]);
 })();
 angular.module('mm.foundation.position', [])
@@ -1183,6 +1283,121 @@ angular.module('mm.foundation.position', [])
     };
 }]);
 
+angular.module('mm.foundation.progressbar', []).constant('progressConfig', {
+    animate: true,
+    max: 100
+}).controller('ProgressController', ['$scope', '$attrs', 'progressConfig', '$animate', function ($scope, $attrs, progressConfig, $animate) {
+    'ngInject';
+
+    var self = this,
+        bars = [],
+        max = angular.isDefined($attrs.max) ? $scope.$parent.$eval($attrs.max) : progressConfig.max,
+        animate = angular.isDefined($attrs.animate) ? $scope.$parent.$eval($attrs.animate) : progressConfig.animate;
+
+    this.addBar = function (bar, element) {
+        var oldValue = 0,
+            index = bar.$parent.$index;
+        if (angular.isDefined(index) && bars[index]) {
+            oldValue = bars[index].value;
+        }
+        bars.push(bar);
+
+        this.update(element, bar.value, oldValue);
+
+        bar.$watch('value', function (value, oldValue) {
+            if (value !== oldValue) {
+                self.update(element, value, oldValue);
+            }
+        });
+
+        bar.$on('$destroy', function () {
+            self.removeBar(bar);
+        });
+    };
+
+    // Update bar element width
+    this.update = function (element, newValue, oldValue) {
+        var percent = this.getPercentage(newValue);
+
+        if (animate) {
+            element.css('width', this.getPercentage(oldValue) + '%');
+            $animate.animate(element, {
+                'width': this.getPercentage(oldValue) + '%'
+            }, {
+                width: percent + '%'
+            });
+            // $transition(element, {
+            //     width: percent + '%'
+            // });
+        } else {
+                element.css({
+                    'transition': 'none',
+                    'width': percent + '%'
+                });
+            }
+    };
+
+    this.removeBar = function (bar) {
+        bars.splice(bars.indexOf(bar), 1);
+    };
+
+    this.getPercentage = function (value) {
+        return Math.round(100 * value / max);
+    };
+}]).directive('progress', function () {
+    'ngInject';
+
+    return {
+        restrict: 'EA',
+        replace: true,
+        transclude: true,
+        controller: 'ProgressController',
+        require: 'progress',
+        scope: {},
+        template: '<div class="progress" ng-transclude></div>'
+        //templateUrl: 'template/progressbar/progress.html' // Works in AngularJS 1.2
+    };
+}).directive('bar', function () {
+    'ngInject';
+
+    return {
+        restrict: 'EA',
+        replace: true,
+        transclude: true,
+        require: '^progress',
+        scope: {
+            value: '=',
+            type: '@'
+        },
+        templateUrl: 'template/progressbar/bar.html',
+        link: function link(scope, element, attrs, progressCtrl) {
+            progressCtrl.addBar(scope, element);
+        }
+    };
+}).directive('progressbar', function () {
+    return {
+        restrict: 'EA',
+        replace: true,
+        transclude: true,
+        controller: 'ProgressController',
+        scope: {
+            value: '=',
+            type: '@'
+        },
+        templateUrl: 'template/progressbar/progressbar.html',
+        link: function link(scope, element, attrs, progressCtrl) {
+            progressCtrl.addBar(scope, angular.element(element.children()[0]));
+        }
+    };
+});
+
+(function () {
+    angular.module("mm.foundation.progressbar").run(["$templateCache", function ($templateCache) {
+        $templateCache.put("template/progressbar/bar.html", "<span class=\"meter\" ng-transclude></span>\n");
+        $templateCache.put("template/progressbar/progress.html", "<div class=\"progress\" ng-class=\"type\" ng-transclude></div>\n");
+        $templateCache.put("template/progressbar/progressbar.html", "<div class=\"progress\" role=\"progressbar\" ng-class=\"type\">\n  <span class=\"progress-meter\"><p class=\"progress-meter-text\" ng-transclude></p></span>\n</div>\n");
+    }]);
+})();
 /**
  * @ngdoc overview
  * @name mm.foundation.tabs
@@ -1483,4 +1698,4 @@ angular.module('mm.foundation.tabs', []).controller('TabsetController', ['$scope
         $templateCache.put("template/tabs/tabset.html", "<div class=\"tabbable\">\n  <ul class=\"tabs\" ng-class=\"{\'vertical\': vertical}\" ng-transclude></ul>\n  <div class=\"tabs-content\" ng-class=\"{\'vertical\': vertical}\">\n    <div class=\"tabs-panel\"\n      ng-repeat=\"tab in tabs\"\n      ng-class=\"{\'is-active\': tab.active}\">\n      <div tab-content-transclude=\"tab\"></div>\n    </div>\n  </div>\n</div>\n");
     }]);
 })();
-angular.module("mm.foundation", ["mm.foundation.accordion", "mm.foundation.alert", "mm.foundation.bindHtml", "mm.foundation.buttons", "mm.foundation.dropdownToggle", "mm.foundation.mediaQueries", "mm.foundation.modal", "mm.foundation.pagination", "mm.foundation.position", "mm.foundation.tabs"]);
+angular.module("mm.foundation", ["mm.foundation.accordion", "mm.foundation.alert", "mm.foundation.bindHtml", "mm.foundation.buttons", "mm.foundation.dropdownToggle", "mm.foundation.mediaQueries", "mm.foundation.modal", "mm.foundation.offcanvas", "mm.foundation.pagination", "mm.foundation.position", "mm.foundation.progressbar", "mm.foundation.tabs"]);

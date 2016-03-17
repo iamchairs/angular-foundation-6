@@ -2,6 +2,9 @@ img.logo {
   margin: 50px auto 50px auto;
   width: 275px; }
 
+div[role=main] section.demo {
+  padding-top: 30px; }
+
 .footer {
   text-align: center;
   padding: 30px 0;
@@ -27,6 +30,12 @@ img.logo {
 
 /**
  * Animations
+ */
+/**
+ * Foundation for Sites by ZURB
+ * Version 6.2.0
+ * foundation.zurb.com
+ * Licensed under MIT Open Source
  */
 .reveal-overlay.ng-enter {
   transition-duration: 500ms;
@@ -84,3 +93,7 @@ img.logo {
 
 .alert-box {
   background-color: #5592BB; }
+
+.ng-submitted .ng-invalid:not(:focus), .ng-touched.ng-invalid:not(:focus) {
+  background-color: rgba(236, 88, 64, 0.1);
+  border-color: #ec5840; }
