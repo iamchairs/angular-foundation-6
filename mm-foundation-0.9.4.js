@@ -4,7 +4,7 @@
  * angular-foundation-6
  * http://circlingthesun.github.io/angular-foundation-6/
 
- * Version: 0.9.0 - 2016-03-24
+ * Version: 0.9.4 - 2016-03-24
  * License: MIT
  * (c) 
  */
@@ -168,12 +168,6 @@ angular.module('mm.foundation.accordion', []).constant('accordionConfig', {
     };
 });
 
-(function () {
-    angular.module("mm.foundation.accordion").run(["$templateCache", function ($templateCache) {
-        $templateCache.put("template/accordion/accordion-group.html", "<li class=\"accordion-item\" ng-class=\"{ \'is-active\': $ctrl.isOpen }\">\n  <a ng-click=\"$ctrl.isOpen = !$ctrl.isOpen\" class=\"accordion-title\" accordion-transclude>{{$ctrl.heading}}</a>\n  <div class=\"accordion-content\" ng-style=\"{display: $ctrl.isOpen ? \'block\' : \'none\'}\" ng-transclude></div>\n</li>\n");
-        $templateCache.put("template/accordion/accordion.html", "<ul class=\"accordion\" ng-transclude></ul>\n");
-    }]);
-})();
 angular.module("mm.foundation.alert", []).controller('AlertController', ['$scope', '$attrs', function ($scope, $attrs) {
     'ngInject';
 
@@ -194,11 +188,6 @@ angular.module("mm.foundation.alert", []).controller('AlertController', ['$scope
     };
 });
 
-(function () {
-    angular.module("mm.foundation.alert").run(["$templateCache", function ($templateCache) {
-        $templateCache.put("template/alert/alert.html", "<div class=\"callout\" ng-class=\'(type || \"\")\'>\n  <span ng-transclude></span>\n  <button ng-click=\"close()\" ng-show=\"closeable\" class=\"close-button\" aria-label=\"Close alert\" type=\"button\">\n      <span aria-hidden=\"true\">&times;</span>\n  </button>\n</div>\n");
-    }]);
-})();
 angular.module('mm.foundation.bindHtml', []).directive('bindHtmlUnsafe', function () {
     'ngInject';
 
@@ -342,11 +331,6 @@ function dropdownToggle($document, $window, $location) {
  */
 angular.module('mm.foundation.dropdownToggle', ['mm.foundation.position', 'mm.foundation.mediaQueries']).directive('dropdownToggle', dropdownToggle);
 
-(function () {
-    angular.module("mm.foundation.dropdownToggle").run(["$templateCache", function ($templateCache) {
-        $templateCache.put("template/dropdownToggle/dropdownToggle.html", "<span ng-click=\"$ctrl.toggle()\" ng-transclude=\"toggle\">Toggle Dropdown</span>\n<div\n    ng-transclude=\"pane\"\n    ng-style=\"$ctrl.css\"\n    ng-class=\"{\'is-open\': $ctrl.active}\"\n    ng-attr-aria-hidden=\"$ctrl.active\"\n    class=\"dropdown-pane\">\n  Just some junk that needs to be said. Or not. Your choice.\n</div>\n");
-    }]);
-})();
 angular.module("mm.foundation.mediaQueries", []).factory('matchMedia', ['$document', '$window', function ($document, $window) {
     'ngInject';
     // MatchMedia for IE <= 9
@@ -855,12 +839,6 @@ angular.module('mm.foundation.modal', [])
     return $modalProvider;
 });
 
-(function () {
-    angular.module("mm.foundation.modal").run(["$templateCache", function ($templateCache) {
-        $templateCache.put("template/modal/backdrop.html", "<div class=\"reveal-overlay ng-animate\" ng-click=\"close($event)\" style=\"display: block;\"></div>\n");
-        $templateCache.put("template/modal/window.html", "<div tabindex=\"-1\" class=\"reveal without-overlay {{ windowClass }}\" style=\"display: block; visibility: visible;\">\n  <div ng-transclude></div>\n</div>\n");
-    }]);
-})();
 angular.module('mm.foundation.offcanvas', []).directive('offCanvasWrapper', ['$window', function ($window) {
     'ngInject';
 
@@ -1191,12 +1169,6 @@ angular.module('mm.foundation.pagination', []).controller('PaginationController'
     };
 }]);
 
-(function () {
-    angular.module("mm.foundation.pagination").run(["$templateCache", function ($templateCache) {
-        $templateCache.put("template/pagination/pager.html", "<ul class=\"pagination\">\n  <li ng-repeat=\"page in pages\" class=\"arrow\" ng-class=\"{unavailable: page.disabled, left: page.previous, right: page.next}\"><a ng-click=\"selectPage(page.number)\">{{page.text}}</a></li>\n</ul>\n");
-        $templateCache.put("template/pagination/pagination.html", "<ul class=\"pagination\" role=\"navigation\" aria-label=\"Pagination\">\n  <li ng-repeat=\"page in pages\"\n    ng-class=\"{\n        \'pagination-previous\': $first,\n        \'pagination-next\': $last,\n        current: page.active,\n        unavailable: page.disabled\n        }\">\n    <a ng-if=\"!page.active\" ng-click=\"selectPage(page.number)\">{{page.text}}</a>\n    <span ng-if=\"page.active\">{{page.text}}</span>\n  </li>\n</ul>\n");
-    }]);
-})();
 angular.module('mm.foundation.position', [])
 
 /**
@@ -1391,13 +1363,6 @@ angular.module('mm.foundation.progressbar', []).constant('progressConfig', {
     };
 });
 
-(function () {
-    angular.module("mm.foundation.progressbar").run(["$templateCache", function ($templateCache) {
-        $templateCache.put("template/progressbar/bar.html", "<span class=\"meter\" ng-transclude></span>\n");
-        $templateCache.put("template/progressbar/progress.html", "<div class=\"progress\" ng-class=\"type\" ng-transclude></div>\n");
-        $templateCache.put("template/progressbar/progressbar.html", "<div class=\"progress\" role=\"progressbar\" ng-class=\"type\">\n  <span class=\"progress-meter\"><p class=\"progress-meter-text\" ng-transclude></p></span>\n</div>\n");
-    }]);
-})();
 /**
  * @ngdoc overview
  * @name mm.foundation.tabs
@@ -1692,12 +1657,6 @@ angular.module('mm.foundation.tabs', []).controller('TabsetController', ['$scope
     }
 });
 
-(function () {
-    angular.module("mm.foundation.tabs").run(["$templateCache", function ($templateCache) {
-        $templateCache.put("template/tabs/tab.html", "<li class=\"tabs-title\" ng-class=\"{\'is-active\': active}\">\n  <a ng-click=\"select()\" ng-attr-aria-selected=\"{{active}}\" tab-heading-transclude>{{heading}}</a>\n</li>\n");
-        $templateCache.put("template/tabs/tabset.html", "<div class=\"tabbable\">\n  <ul class=\"tabs\" ng-class=\"{\'vertical\': vertical}\" ng-transclude></ul>\n  <div class=\"tabs-content\" ng-class=\"{\'vertical\': vertical}\">\n    <div class=\"tabs-panel\"\n      ng-repeat=\"tab in tabs\"\n      ng-class=\"{\'is-active\': tab.active}\">\n      <div tab-content-transclude=\"tab\"></div>\n    </div>\n  </div>\n</div>\n");
-    }]);
-})();
 /**
  * The following features are still outstanding: animation as a
  * function, placement as a function, inside, support for more triggers than
@@ -2098,10 +2057,4 @@ angular.module('mm.foundation.tooltip', ['mm.foundation.position', 'mm.foundatio
     return $tooltip('tooltipHtmlUnsafe', 'tooltip', 'mouseover');
 }]);
 
-(function () {
-    angular.module("mm.foundation.tooltip").run(["$templateCache", function ($templateCache) {
-        $templateCache.put("template/tooltip/tooltip-html-unsafe-popup.html", "<div class=\"tooltip {{placement}}\" style=\"width: auto;\">\n  <span bind-html-unsafe=\"content\"></span>\n</div>\n");
-        $templateCache.put("template/tooltip/tooltip-popup.html", "<div class=\"tooltip {{placement}}\" style=\"width: auto;\">\n  <span ng-bind=\"content\"></span>\n</div>\n");
-    }]);
-})();
 angular.module("mm.foundation", ["mm.foundation.accordion", "mm.foundation.alert", "mm.foundation.bindHtml", "mm.foundation.buttons", "mm.foundation.dropdownToggle", "mm.foundation.mediaQueries", "mm.foundation.modal", "mm.foundation.offcanvas", "mm.foundation.pagination", "mm.foundation.position", "mm.foundation.progressbar", "mm.foundation.tabs", "mm.foundation.tooltip"]);

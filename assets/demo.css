@@ -37,6 +37,28 @@ div[role=main] section.demo {
  * foundation.zurb.com
  * Licensed under MIT Open Source
  */
+.tooltip.ng-enter {
+  transition-duration: 500ms;
+  transition-timing-function: linear;
+  transition-duration: 0.25s;
+  transition-delay: 0s;
+  opacity: 0;
+  transition-property: opacity; }
+
+.tooltip.ng-enter.ng-enter-active {
+  opacity: 1; }
+
+.tooltip.ng-leave {
+  transition-duration: 500ms;
+  transition-timing-function: linear;
+  transition-duration: 0.25s;
+  transition-delay: 0s;
+  opacity: 1;
+  transition-property: opacity; }
+
+.tooltip.ng-leave.ng-leave-active {
+  opacity: 0; }
+
 .reveal-overlay.ng-enter {
   transition-duration: 500ms;
   transition-timing-function: linear;
