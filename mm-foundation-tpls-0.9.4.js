@@ -4,7 +4,7 @@
  * angular-foundation-6
  * http://circlingthesun.github.io/angular-foundation-6/
 
- * Version: 0.9.4 - 2016-03-27
+ * Version: 0.9.4 - 2016-03-28
  * License: MIT
  * (c) 
  */
@@ -278,6 +278,85 @@ angular.module('mm.foundation.buttons', []).constant('buttonConfig', {
                 });
             });
         }
+    };
+});
+
+angular.module('mm.foundation.dropdownMenu', []).directive('dropdownMenu', ['$compile', function ($compile) {
+    'ngInject';
+
+    return {
+        bindToController: {
+            disableHover: '=',
+            disableClickOpen: '='
+        },
+        scope: {},
+        restrict: 'A',
+        controllerAs: 'vm',
+        controller: ['$scope', '$element', function controller($scope, $element) {
+            'ngInject';
+
+            var vm = this;
+            // $element is-dropdown-submenu-parent
+        }]
+    };
+}]).directive('li', function () {
+    return {
+        require: { dropdownMenu: '?^^dropdownMenu' },
+        bindToController: true,
+        restrict: 'E',
+        controllerAs: 'vm',
+        controller: ['$element', function controller($element) {
+            'ngInject';
+
+            var vm = this;
+            vm.$onInit = function () {
+                if (!vm.dropdownMenu) {
+                    return;
+                }
+
+                var ulChild = null;
+                var children = $element[0].children;
+
+                for (var i = 0; i < children.length; i++) {
+                    var child = angular.element(children[i]);
+                    if (child[0].nodeName === 'UL' && child.hasClass('menu')) {
+                        ulChild = child;
+                    }
+                }
+
+                var topLevel = $element.parent()[0].hasAttribute('dropdown-menu');
+                if (!topLevel) {
+                    $element.addClass('is-submenu-item');
+                }
+
+                if (ulChild) {
+                    ulChild.addClass('is-dropdown-submenu menu submenu vertical');
+                    $element.addClass('is-dropdown-submenu-parent opens-right');
+
+                    if (topLevel) {
+                        ulChild.addClass('first-sub');
+                    }
+
+                    if (!vm.dropdownMenu.disableHover) {
+                        $element.on('mouseenter', function () {
+                            ulChild.addClass('js-dropdown-active');
+                            $element.addClass('is-active');
+                        });
+                    }
+
+                    $element.on('click', function () {
+                        ulChild.addClass('js-dropdown-active');
+                        $element.addClass('is-active');
+                        // $element.attr('data-is-click', 'true');
+                    });
+
+                    $element.on('mouseleave', function () {
+                        ulChild.removeClass('js-dropdown-active');
+                        $element.removeClass('is-active');
+                    });
+                }
+            };
+        }]
     };
 });
 
@@ -866,6 +945,8 @@ angular.module('mm.foundation.offcanvas', []).directive('offCanvasWrapper', ['$w
 
     return {
         scope: {},
+        bindToController: { disableAutoClose: '=' },
+        controllerAs: 'vm',
         restrict: 'C',
         controller: ['$scope', '$element', function controller($scope, $element) {
             'ngInject';
@@ -875,17 +956,27 @@ angular.module('mm.foundation.offcanvas', []).directive('offCanvasWrapper', ['$w
             var left = angular.element($element[0].querySelector('.position-left'));
             var right = angular.element($element[0].querySelector('.position-right'));
             var inner = angular.element($element[0].querySelector('.off-canvas-wrapper-inner'));
+            // var overlay = angular.element(); js-off-canvas-exit
+            var exitOverlay = angular.element('<div class="js-off-canvas-exit"></div>');
+            inner.append(exitOverlay);
+
+            exitOverlay.on('click', function () {
+                $ctrl.hide();
+            });
 
             $ctrl.leftToggle = function () {
                 inner && inner.toggleClass('is-off-canvas-open');
                 inner && inner.toggleClass('is-open-left');
                 left && left.toggleClass('is-open');
+                exitOverlay.addClass('is-visible');
+                // is-visible
             };
 
             $ctrl.rightToggle = function () {
                 inner && inner.toggleClass('is-off-canvas-open');
                 inner && inner.toggleClass('is-open-right');
                 right && right.toggleClass('is-open');
+                exitOverlay.addClass('is-visible');
             };
 
             $ctrl.hide = function () {
@@ -894,6 +985,7 @@ angular.module('mm.foundation.offcanvas', []).directive('offCanvasWrapper', ['$w
                 left && left.removeClass('is-open');
                 right && right.removeClass('is-open');
                 inner && inner.removeClass('is-off-canvas-open');
+                exitOverlay.removeClass('is-visible');
             };
 
             var win = angular.element($window);
@@ -909,7 +1001,7 @@ angular.module('mm.foundation.offcanvas', []).directive('offCanvasWrapper', ['$w
     'ngInject';
 
     return {
-        require: '^offCanvasWrapper',
+        require: '^^offCanvasWrapper',
         restrict: 'C',
         link: function link($scope, element, attrs, offCanvasWrapper) {
             element.on('click', function () {
@@ -921,7 +1013,7 @@ angular.module('mm.foundation.offcanvas', []).directive('offCanvasWrapper', ['$w
     'ngInject';
 
     return {
-        require: '^offCanvasWrapper',
+        require: '^^offCanvasWrapper',
         restrict: 'C',
         link: function link($scope, element, attrs, offCanvasWrapper) {
             element.on('click', function () {
@@ -929,27 +1021,29 @@ angular.module('mm.foundation.offcanvas', []).directive('offCanvasWrapper', ['$w
             });
         }
     };
-}).directive('exitOffCanvas', function () {
+}).directive('offCanvas', function () {
     'ngInject';
 
     return {
-        require: '^offCanvasWrapper',
+        require: { 'offCanvasWrapper': '^^offCanvasWrapper' },
         restrict: 'C',
-        link: function link($scope, element, attrs, offCanvasWrap) {
-            element.on('click', function () {
-                offCanvasWrap.hide();
-            });
-        }
+        bindToController: {},
+        scope: {},
+        controllerAs: 'vm',
+        controller: function controller() {}
     };
-}).directive('offCanvasList', function () {
+}).directive('li', function () {
     'ngInject';
 
     return {
-        require: '^offCanvasWrapper',
-        restrict: 'C',
-        link: function link($scope, element, attrs, offCanvasWrap) {
+        require: '?^^offCanvas',
+        restrict: 'E',
+        link: function link($scope, element, attrs, offCanvas) {
+            if (!offCanvas || offCanvas.offCanvasWrapper.disableAutoClose) {
+                return;
+            }
             element.on('click', function () {
-                offCanvasWrap.hide();
+                offCanvas.offCanvasWrapper.hide();
             });
         }
     };
@@ -2104,4 +2198,4 @@ angular.module('mm.foundation.tooltip', ['mm.foundation.position', 'mm.foundatio
         $templateCache.put("template/tooltip/tooltip-popup.html", "<div class=\"tooltip {{placement}}\" style=\"width: auto;\">\n  <span ng-bind=\"content\"></span>\n</div>\n");
     }]);
 })();
-angular.module("mm.foundation", ["mm.foundation.accordion", "mm.foundation.alert", "mm.foundation.bindHtml", "mm.foundation.buttons", "mm.foundation.dropdownToggle", "mm.foundation.mediaQueries", "mm.foundation.modal", "mm.foundation.offcanvas", "mm.foundation.pagination", "mm.foundation.position", "mm.foundation.progressbar", "mm.foundation.tabs", "mm.foundation.tooltip"]);
+angular.module("mm.foundation", ["mm.foundation.accordion", "mm.foundation.alert", "mm.foundation.bindHtml", "mm.foundation.buttons", "mm.foundation.dropdownMenu", "mm.foundation.dropdownToggle", "mm.foundation.mediaQueries", "mm.foundation.modal", "mm.foundation.offcanvas", "mm.foundation.pagination", "mm.foundation.position", "mm.foundation.progressbar", "mm.foundation.tabs", "mm.foundation.tooltip"]);
