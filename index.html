@@ -726,7 +726,7 @@
   <dropdown-toggle style="display: block;">
     <toggle><p><a>Click me for a dropdown-toggle, yo!</a></p></toggle>
     <pane>
-      <ul class="f-dropdown-toggle">
+      <ul class="menu vertical">
         <li ng-repeat="choice in items">
           <a>{{choice}}</a>
         </li>
@@ -739,7 +739,7 @@
       <a class="dropdown button">dropdown-toggles can also have links!</a>
     </toggle>
     <pane>
-      <ul>
+      <ul class="menu vertical">
         <li ng-repeat="(label, url) in linkItems">
           <a href="{{url}}" target="_blank">{{label}}</a>
         </li>
@@ -756,7 +756,7 @@
         </a>
       </toggle>
       <pane>
-        <ul>
+        <ul class="menu vertical">
           <li ng-repeat="choice in items">
             <a>{{choice}}</a>
           </li>
@@ -789,7 +789,7 @@
   &lt;dropdown-toggle style=&quot;display: block;&quot;&gt;
     &lt;toggle&gt;&lt;p&gt;&lt;a&gt;Click me for a dropdown-toggle, yo!&lt;/a&gt;&lt;/p&gt;&lt;/toggle&gt;
     &lt;pane&gt;
-      &lt;ul class=&quot;f-dropdown-toggle&quot;&gt;
+      &lt;ul class=&quot;menu vertical&quot;&gt;
         &lt;li ng-repeat=&quot;choice in items&quot;&gt;
           &lt;a&gt;{{choice}}&lt;/a&gt;
         &lt;/li&gt;
@@ -802,7 +802,7 @@
       &lt;a class=&quot;dropdown button&quot;&gt;dropdown-toggles can also have links!&lt;/a&gt;
     &lt;/toggle&gt;
     &lt;pane&gt;
-      &lt;ul&gt;
+      &lt;ul class=&quot;menu vertical&quot;&gt;
         &lt;li ng-repeat=&quot;(label, url) in linkItems&quot;&gt;
           &lt;a href=&quot;{{url}}&quot; target=&quot;_blank&quot;&gt;{{label}}&lt;/a&gt;
         &lt;/li&gt;
@@ -819,7 +819,7 @@
         &lt;/a&gt;
       &lt;/toggle&gt;
       &lt;pane&gt;
-        &lt;ul&gt;
+        &lt;ul class=&quot;menu vertical&quot;&gt;
           &lt;li ng-repeat=&quot;choice in items&quot;&gt;
             &lt;a&gt;{{choice}}&lt;/a&gt;
           &lt;/li&gt;
