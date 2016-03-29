@@ -292,6 +292,7 @@ angular.module('mm.foundation.dropdownMenu', []).directive('dropdownMenu', ['$co
     return {
         require: { dropdownMenu: '?^^dropdownMenu' },
         bindToController: true,
+        scope: {},
         restrict: 'E',
         controllerAs: 'vm',
         controller: ['$element', function controller($element) {
