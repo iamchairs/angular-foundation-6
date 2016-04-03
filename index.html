@@ -8,7 +8,7 @@
   <meta name="description" content="AngularJS (Angular) native
   directives for Foundation. Small footprint (5kB gzipped!),
   no 3rd party JS dependencies (jQuery, Foundation JS) required!
-  Widgets: Accordion, Alert, Buttons, Dropdown Menu, Dropdown Toggle, Modal, Offcanvas, Pagination, Progressbar, Tabs, Tooltip, ">
+  Widgets: Accordion, Alert, Buttons, Dropdown Menu, Dropdown Toggle, Modal, Offcanvas, Pagination, Progressbar, Rating, Tabs, Tooltip, ">
 
   <script src="//cdnjs.cloudflare.com/ajax/libs/fastclick/0.6.7/fastclick.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
@@ -38,7 +38,7 @@
             <li>
               <a href="#">Directives</a>
               <ul id="directives-list" class="submenu menu vertical">
-                <li><a href="#accordion">Accordion</a></li><li><a href="#alert">Alert</a></li><li><a href="#buttons">Buttons</a></li><li><a href="#dropdownMenu">Dropdown Menu</a></li><li><a href="#dropdownToggle">Dropdown Toggle</a></li><li><a href="#modal">Modal</a></li><li><a href="#offcanvas">Offcanvas</a></li><li><a href="#pagination">Pagination</a></li><li><a href="#progressbar">Progressbar</a></li><li><a href="#tabs">Tabs</a></li><li><a href="#tooltip">Tooltip</a></li>
+                <li><a href="#accordion">Accordion</a></li><li><a href="#alert">Alert</a></li><li><a href="#buttons">Buttons</a></li><li><a href="#dropdownMenu">Dropdown Menu</a></li><li><a href="#dropdownToggle">Dropdown Toggle</a></li><li><a href="#modal">Modal</a></li><li><a href="#offcanvas">Offcanvas</a></li><li><a href="#pagination">Pagination</a></li><li><a href="#progressbar">Progressbar</a></li><li><a href="#rating">Rating</a></li><li><a href="#tabs">Tabs</a></li><li><a href="#tooltip">Tooltip</a></li>
               </ul>
             </li>
             <li><a href="#animations">Animations</a></li>
@@ -56,7 +56,7 @@
               <li>
                 <a href="#">Directives</a>
                 <ul id="directives-list" class="menu">
-                  <li><a href="#accordion">Accordion</a></li><li><a href="#alert">Alert</a></li><li><a href="#buttons">Buttons</a></li><li><a href="#dropdownMenu">Dropdown Menu</a></li><li><a href="#dropdownToggle">Dropdown Toggle</a></li><li><a href="#modal">Modal</a></li><li><a href="#offcanvas">Offcanvas</a></li><li><a href="#pagination">Pagination</a></li><li><a href="#progressbar">Progressbar</a></li><li><a href="#tabs">Tabs</a></li><li><a href="#tooltip">Tooltip</a></li>
+                  <li><a href="#accordion">Accordion</a></li><li><a href="#alert">Alert</a></li><li><a href="#buttons">Buttons</a></li><li><a href="#dropdownMenu">Dropdown Menu</a></li><li><a href="#dropdownToggle">Dropdown Toggle</a></li><li><a href="#modal">Modal</a></li><li><a href="#offcanvas">Offcanvas</a></li><li><a href="#pagination">Pagination</a></li><li><a href="#progressbar">Progressbar</a></li><li><a href="#rating">Rating</a></li><li><a href="#tabs">Tabs</a></li><li><a href="#tooltip">Tooltip</a></li>
                 </ul>
               </li>
               <li><a href="#animations">Animations</a></li>
@@ -1642,6 +1642,164 @@ angular.module('foundationDemoApp').controller('ModalInstanceCtrl', function($sc
     $scope.type = type;
   };
   $scope.random();
+});
+</script>
+                
+                  <section class="demo" id="rating">
+                    <div class="page-header">
+                      <h1>Rating
+                        <small>
+                          (<a target="_blank" href="https://github.com/circlingthesun/angular-foundation-6/tree/master/src/rating">mm.foundation.rating</a>)
+                        </small>
+                      </h1>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="columns medium-6 show-grid">
+                        <div ng-controller="RatingDemoCtrl">
+    <h4>Default</h4>
+    <rating value="rate" max="max" readonly="isReadonly" on-hover="hoveringOver(value)" on-leave="overStar = null"></rating>
+    <span class="label" ng-class="{'label-warning': percent<30, 'label-info': percent>=30 && percent<70, 'label-success': percent>=70}" ng-show="overStar && !isReadonly">{{percent}}%</span>
+
+    <pre style="margin:15px 0;">Rate: <b>{{rate}}</b> - Readonly is: <i>{{isReadonly}}</i> - Hovering over: <b>{{overStar || "none"}}</b></pre>
+
+    <button class="button small alert" ng-click="rate = 0" ng-disabled="isReadonly">Clear</button>
+    <button class="button small" ng-click="isReadonly = ! isReadonly">Toggle Readonly</button>
+    <hr />
+
+    <h4>Custom icons</h4>
+    <div ng-init="x = 5">
+      <rating value="x" max="15" state-on="'fa-check-circle'" state-off="'fa-check-circle-o'"></rating>
+      <b>(<i>Rate:</i> {{x}})</b>
+    </div>
+    <div ng-init="y = 2">
+      <rating value="y" rating-states="ratingStates"></rating>
+      <b>(<i>Rate:</i> {{y}})</b>
+    </div>
+</div>
+
+                      </div>
+                      <div class="columns medium-6">
+                        <p>Rating directive that will take care of visualising a star rating bar.</p>
+<p>It uses Font Awesome icons (<a href="http://fontawesome.io/">http://fontawesome.io/</a>) by default.</p>
+<h3 id="settings">Settings</h3>
+<h4 id="-rating-"><code>&lt;rating&gt;</code></h4>
+<ul>
+<li><p><code>value</code> <i class="fa fa-eye"></i>
+  :
+  The current rate.</p>
+</li>
+<li><p><code>max</code>
+  <em>(Defaults: 5)</em> :
+  Changes the number of icons.</p>
+</li>
+<li><p><code>readonly</code>
+  <em>(Defaults: false)</em> :
+  Prevent user&#39;s interaction.</p>
+</li>
+<li><p><code>on-hover(value)</code>
+  :
+  An optional expression called when user&#39;s mouse is over a particular icon.</p>
+</li>
+<li><p><code>on-leave()</code>
+  :
+  An optional expression called when user&#39;s mouse leaves the control altogether.</p>
+</li>
+<li><p><code>state-on</code>
+  <em>(Defaults: null)</em> :
+  A variable used in template to specify the state (class, src, etc) for selected icons.</p>
+</li>
+<li><p><code>state-off</code>
+  <em>(Defaults: null)</em> :
+  A variable used in template to specify the state for unselected icons.</p>
+</li>
+<li><p><code>rating-states</code>
+  <em>(Defaults: null)</em> :
+  An array of objects defining properties for all icons. In default template, <code>stateOn</code> &amp; <code>stateOff</code> property is used to specify the icon&#39;s class.</p>
+</li>
+</ul>
+
+                      </div>
+                    </div>
+                    <!-- <hr> -->
+                    <div class="row code">
+                      <div class="columns medium-12" ng-controller="PlunkerCtrl">
+                        <div class="float-right">
+                          <button class="button secondary" id="plunk-btn" ng-click="edit('1.5.3', '6.2.0', '0.9.9', 'rating')">
+                            <i class="fa fa-edit"></i> Edit in plunker
+                          </button>
+                        </div>
+                        <tabset>
+                          <tab heading="Markup">
+                            <div plunker-content="markup">
+                              <pre ng-non-bindable><code data-language="html">&lt;div ng-controller=&quot;RatingDemoCtrl&quot;&gt;
+    &lt;h4&gt;Default&lt;/h4&gt;
+    &lt;rating value=&quot;rate&quot; max=&quot;max&quot; readonly=&quot;isReadonly&quot; on-hover=&quot;hoveringOver(value)&quot; on-leave=&quot;overStar = null&quot;&gt;&lt;/rating&gt;
+    &lt;span class=&quot;label&quot; ng-class=&quot;{&#39;label-warning&#39;: percent&lt;30, &#39;label-info&#39;: percent&gt;=30 &amp;&amp; percent&lt;70, &#39;label-success&#39;: percent&gt;=70}&quot; ng-show=&quot;overStar &amp;&amp; !isReadonly&quot;&gt;{{percent}}%&lt;/span&gt;
+
+    &lt;pre style=&quot;margin:15px 0;&quot;&gt;Rate: &lt;b&gt;{{rate}}&lt;/b&gt; - Readonly is: &lt;i&gt;{{isReadonly}}&lt;/i&gt; - Hovering over: &lt;b&gt;{{overStar || &quot;none&quot;}}&lt;/b&gt;&lt;/pre&gt;
+
+    &lt;button class=&quot;button small alert&quot; ng-click=&quot;rate = 0&quot; ng-disabled=&quot;isReadonly&quot;&gt;Clear&lt;/button&gt;
+    &lt;button class=&quot;button small&quot; ng-click=&quot;isReadonly = ! isReadonly&quot;&gt;Toggle Readonly&lt;/button&gt;
+    &lt;hr /&gt;
+
+    &lt;h4&gt;Custom icons&lt;/h4&gt;
+    &lt;div ng-init=&quot;x = 5&quot;&gt;
+      &lt;rating value=&quot;x&quot; max=&quot;15&quot; state-on=&quot;&#39;fa-check-circle&#39;&quot; state-off=&quot;&#39;fa-check-circle-o&#39;&quot;&gt;&lt;/rating&gt;
+      &lt;b&gt;(&lt;i&gt;Rate:&lt;/i&gt; {{x}})&lt;/b&gt;
+    &lt;/div&gt;
+    &lt;div ng-init=&quot;y = 2&quot;&gt;
+      &lt;rating value=&quot;y&quot; rating-states=&quot;ratingStates&quot;&gt;&lt;/rating&gt;
+      &lt;b&gt;(&lt;i&gt;Rate:&lt;/i&gt; {{y}})&lt;/b&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+                            </div>
+                          </tab>
+                          <tab heading="JavaScript">
+                            <div plunker-content="javascript">
+                              <pre ng-non-bindable><code data-language="javascript">angular.module(&#39;foundationDemoApp&#39;).controller(&#39;RatingDemoCtrl&#39;, function ($scope) {
+  $scope.rate = 7;
+  $scope.max = 10;
+  $scope.isReadonly = false;
+
+  $scope.hoveringOver = function(value) {
+    $scope.overStar = value;
+    $scope.percent = 100 * (value / $scope.max);
+  };
+
+  $scope.ratingStates = [
+    {stateOn: &#39;fa-check-circle&#39;, stateOff: &#39;fa-check-circle-o&#39;},
+    {stateOn: &#39;fa-star&#39;, stateOff: &#39;fa-start-o&#39;},
+    {stateOn: &#39;fa-heart&#39;, stateOff: &#39;fa-ban&#39;},
+    {stateOn: &#39;fa-heart&#39;},
+    {stateOff: &#39;fa-power-off&#39;}
+  ];
+});
+</code></pre>
+                            </div>
+                          </tab>
+                        </tabset>
+                      </div>
+                    </div>
+                  </section>
+                  <script>angular.module('foundationDemoApp').controller('RatingDemoCtrl', function ($scope) {
+  $scope.rate = 7;
+  $scope.max = 10;
+  $scope.isReadonly = false;
+
+  $scope.hoveringOver = function(value) {
+    $scope.overStar = value;
+    $scope.percent = 100 * (value / $scope.max);
+  };
+
+  $scope.ratingStates = [
+    {stateOn: 'fa-check-circle', stateOff: 'fa-check-circle-o'},
+    {stateOn: 'fa-star', stateOff: 'fa-start-o'},
+    {stateOn: 'fa-heart', stateOff: 'fa-ban'},
+    {stateOn: 'fa-heart'},
+    {stateOff: 'fa-power-off'}
+  ];
 });
 </script>
                 
