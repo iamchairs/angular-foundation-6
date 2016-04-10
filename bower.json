@@ -2,6 +2,7 @@
   "name": "angular-foundation-6",
   "version": "0.0.0",
   "homepage": "https://github.com/circlingthesun/angular-foundation-6",
+
   "authors": [
     "Micah Williamson <micahwllmsn@gmail.com>"
   ],
@@ -10,6 +11,9 @@
     "dist/mm-foundation-0.9.12.min.js",
     "dist/mm-foundation-tpls-0.9.12.min.js"
   ],
+  "dependencies": {
+    "angular": "~1.5.0"
+  },
   "moduleType": [],
   "keywords": [
     "angular",
